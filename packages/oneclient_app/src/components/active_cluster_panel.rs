@@ -2,7 +2,7 @@ use freya::animation::*;
 use freya::prelude::*;
 use freya::router::RouterContext;
 
-use crate::components::{Button, Icon, IconType};
+use crate::components::{Button, ClusterFacts, Icon, IconType, cluster_path};
 use oneclient_common::parse_mc_version;
 use oneclient_core::clusters::ClusterKind;
 
@@ -80,7 +80,7 @@ impl Component for ActiveClusterPanel {
         let (title, subtitle) = if cluster.user_created && cluster.kind != ClusterKind::OneClient {
             (cluster.name.clone(), version)
         } else {
-            let mut parts = vec!["OneClient".to_string()];
+            let mut parts = vec![oneclient_common::brand::APP_NAME.to_string()];
             let title = if cluster.user_created {
                 parts.push(version);
                 cluster.name.clone()
@@ -101,24 +101,26 @@ impl Component for ActiveClusterPanel {
             .cross_align(Alignment::Start)
             .offset_x(slide_x)
             .opacity(p)
+            .child(cluster_path(&cluster))
             .child(
                 label()
                     .text(title)
                     .width(Size::fill())
                     .max_lines(1)
                     .text_overflow(TextOverflow::Ellipsis)
-                    .font_size(text_size(56.))
-                    .line_height(1.1)
-                    .font_weight(FontWeight::BOLD)
+                    .font_size(text_size(44.))
+                    .line_height(1.2)
                     .color(colors::on_art()),
             )
             .child(
                 label()
                     .text(subtitle)
                     .font_size(text_size(16.))
-                    .font_weight(FontWeight::SEMI_BOLD)
                     .color(colors::on_art_secondary()),
             )
+            .child(ClusterFacts {
+                cluster: cluster.clone(),
+            })
             .child(
                 rect()
                     .horizontal()
@@ -153,7 +155,7 @@ fn launch_button(
                 dispatch.launch_cluster(cluster_id);
             }
         })
-        .text(label)
+        .text(format!("▶ {label}"))
 }
 
 fn cluster_settings_button(cluster_id: i64) -> impl IntoElement {

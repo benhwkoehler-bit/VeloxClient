@@ -1,9 +1,11 @@
 mod account;
 mod bundles;
+mod import;
 mod language;
 mod location;
 mod migration;
 mod preferences;
+mod renderer;
 mod selection;
 mod summary;
 mod terms;
@@ -17,11 +19,13 @@ pub(crate) use selection::{
 
 pub use account::OnboardingAccount;
 pub use bundles::OnboardingBundles;
+pub use import::OnboardingImport;
 pub use language::OnboardingLanguage;
 pub use location::OnboardingLocation;
 pub use migration::OnboardingMigration;
 pub(crate) use migration::matching_new_cluster_id;
 pub use preferences::OnboardingPreferences;
+pub use renderer::OnboardingRenderer;
 pub use summary::OnboardingSummary;
 pub use terms::OnboardingTerms;
 pub use welcome::OnboardingWelcome;
@@ -39,24 +43,61 @@ use crate::i18n::t;
 use crate::theme::{colors, rounded, text_size};
 use crate::ui::{border_all_color, entrance_motion_layer};
 
+/// VeloxClient: the renderer step (Pure Metal vs. standard) only exists on Apple Silicon Macs.
+pub fn shows_renderer_step() -> bool {
+    cfg!(all(target_os = "macos", target_arch = "aarch64"))
+}
+
+/// First step after welcome/location. VeloxClient has no terms step, so this is the
+/// import step when another install was found, otherwise language.
+pub fn after_location(has_migration: bool) -> Route {
+    if has_migration {
+        Route::OnboardingMigration {}
+    } else {
+        Route::OnboardingLanguage {}
+    }
+}
+
+/// Step that comes right before the import/language step.
+pub fn before_migration(picks_location: bool) -> Route {
+    if picks_location {
+        Route::OnboardingLocation {}
+    } else {
+        Route::OnboardingWelcome {}
+    }
+}
+
+/// Step after the account step (renderer on Apple Silicon, else bundles).
+pub fn after_account() -> Route {
+    if shows_renderer_step() {
+        Route::OnboardingRenderer {}
+    } else {
+        Route::OnboardingBundles {}
+    }
+}
+
 pub fn onboarding_total(has_migration: bool, picks_location: bool) -> usize {
-    7 + usize::from(has_migration) + usize::from(picks_location)
+    7 + usize::from(has_migration)
+        + usize::from(picks_location)
+        + usize::from(shows_renderer_step())
 }
 
 pub fn onboarding_step_index(route: &Route, has_migration: bool, picks_location: bool) -> usize {
     let location = usize::from(picks_location);
     let shift = location + usize::from(has_migration);
+    let renderer = usize::from(shows_renderer_step());
 
     match route {
         Route::OnboardingWelcome {} => 0,
         Route::OnboardingLocation {} => 1,
-        Route::OnboardingTerms {} => 1 + location,
-        Route::OnboardingMigration {} => 2 + location,
-        Route::OnboardingLanguage {} => 2 + shift,
+        Route::OnboardingMigration {} => 1 + location,
+        Route::OnboardingLanguage {} => 1 + shift,
+        Route::OnboardingImport {} => 2 + shift,
         Route::OnboardingAccount {} => 3 + shift,
-        Route::OnboardingBundles {} => 4 + shift,
-        Route::OnboardingPreferences {} => 5 + shift,
-        Route::OnboardingSummary {} => 6 + shift,
+        Route::OnboardingRenderer {} => 4 + shift,
+        Route::OnboardingBundles {} => 4 + shift + renderer,
+        Route::OnboardingPreferences {} => 5 + shift + renderer,
+        Route::OnboardingSummary {} => 6 + shift + renderer,
         _ => 0,
     }
 }
@@ -148,8 +189,7 @@ pub(crate) fn onboarding_page(
                         .height(Size::fill())
                         .main_align(Alignment::Center)
                         .padding(Gaps::new(48., 80., 24., 24.))
-                        .spacing(24.)
-                        .child(content),
+                        .child(terminal_panel(content)),
                 ),
         ))
         .child(nav)
@@ -308,17 +348,66 @@ pub(crate) fn version_chip(
         .into_element()
 }
 
+/// VeloxClient: every step's content sits in a terminal window
+pub(crate) fn terminal_panel(content: impl IntoElement) -> impl IntoElement {
+    rect()
+        .vertical()
+        .width(Size::fill())
+        .corner_radius(rounded(8.))
+        .background(colors::page_elevated())
+        .border(border_all_color(1., colors::component_border()))
+        .overflow(Overflow::Clip)
+        .child(
+            rect()
+                .width(Size::fill())
+                .padding(Gaps::new_symmetric(9., 16.))
+                .border(border_all_color(1., colors::component_border()))
+                .child(
+                    label()
+                        .text("velox@client: ~/setup")
+                        .font_family(crate::theme::PIXEL_FONT)
+                        .font_size(text_size(12.))
+                        .color(colors::fg_secondary()),
+                ),
+        )
+        .child(
+            rect()
+                .vertical()
+                .width(Size::fill())
+                .padding(Gaps::new_all(24.))
+                .spacing(24.)
+                .child(content),
+        )
+}
+
+/// `setup --choose-your-renderer` from a step title
+fn setup_command(title: &str) -> String {
+    let slug: Vec<String> = title
+        .split(|c: char| !c.is_alphanumeric())
+        .filter(|word| !word.is_empty())
+        .map(str::to_lowercase)
+        .collect();
+    format!("setup --{}", slug.join("-"))
+}
+
 pub(crate) fn step_heading(title: &str, subtitle: &str) -> impl IntoElement {
     rect()
         .vertical()
         .width(Size::fill())
         .spacing(8.)
         .child(
-            label()
-                .text(title.to_string())
-                .font_size(text_size(36.))
-                .font_weight(FontWeight::BOLD)
-                .color(colors::fg_primary()),
+            paragraph()
+                .font_family(crate::theme::PIXEL_FONT)
+                .font_size(text_size(13.))
+                .span(Span::new("velox ❯ ").color(colors::brand()))
+                .span(Span::new(setup_command(title)).color(colors::fg_secondary())),
+        )
+        .child(
+            paragraph()
+                .font_family(crate::theme::PIXEL_FONT)
+                .font_size(text_size(32.))
+                .span(Span::new("# ").color(colors::brand()))
+                .span(Span::new(title.to_string()).color(colors::fg_primary())),
         )
         .child(
             label()
@@ -340,15 +429,19 @@ mod tests {
             routes.push(Route::OnboardingLocation {});
         }
 
-        routes.push(Route::OnboardingTerms {});
-
         if has_migration {
             routes.push(Route::OnboardingMigration {});
         }
 
         routes.extend([
             Route::OnboardingLanguage {},
+            Route::OnboardingImport {},
             Route::OnboardingAccount {},
+        ]);
+        if shows_renderer_step() {
+            routes.push(Route::OnboardingRenderer {});
+        }
+        routes.extend([
             Route::OnboardingBundles {},
             Route::OnboardingPreferences {},
             Route::OnboardingSummary {},

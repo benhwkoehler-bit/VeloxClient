@@ -94,7 +94,10 @@ impl Component for CrashDialog {
                             .child(header(&crash))
                             .child(subtitle(&crash))
                             .child(body(&crash, confirm))
-                            .child(discord_card(confirm))
+                            // VeloxClient: Polyfrost's support Discord only while their services are on
+                            .maybe(oneclient_common::brand::POLYFROST_SERVICES, |dialog| {
+                                dialog.child(discord_card(confirm))
+                            })
                             .child(actions(&crash, dispatch)),
                     ),
             )
@@ -213,7 +216,12 @@ fn dialog_height(crash: &GameCrash) -> f32 {
     let body = blocks.iter().map(|block| block.height(crash)).sum::<f32>()
         + stacked(blocks.len(), BODY_SPACING);
 
-    DIALOG_PADDING * 2. + HEADER_H + SUBTITLE_H + body + DISCORD_H + ACTIONS_H + DIALOG_SPACING * 4.
+    let discord = if oneclient_common::brand::POLYFROST_SERVICES {
+        DISCORD_H + DIALOG_SPACING
+    } else {
+        0.
+    };
+    DIALOG_PADDING * 2. + HEADER_H + SUBTITLE_H + body + discord + ACTIONS_H + DIALOG_SPACING * 3.
 }
 
 fn stacked(count: usize, spacing: f32) -> f32 {

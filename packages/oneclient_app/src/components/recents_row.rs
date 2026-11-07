@@ -302,7 +302,7 @@ impl Component for ClusterCard {
                                         }
                                         .into_element()
                                     } else {
-                                        title_label(title).into_element()
+                                        title_label(title, active).into_element()
                                     }),
                             )
                             .child(
@@ -327,13 +327,14 @@ impl Component for ClusterCard {
     }
 }
 
-fn title_label(text: String) -> Label {
-    label()
-        .text(text)
-        .font_size(text_size(32.))
-        .font_weight(FontWeight::SEMI_BOLD)
+/// VeloxClient: the active card reads `# 26.3 Fabric`
+fn title_label(text: String, active: bool) -> impl IntoElement {
+    paragraph()
+        .font_size(text_size(24.))
         .max_lines(1)
-        .color(colors::on_media())
+        .text_overflow(TextOverflow::Ellipsis)
+        .maybe(active, |p| p.span(Span::new("# ").color(colors::brand())))
+        .span(Span::new(text).color(colors::on_media()))
 }
 
 #[derive(PartialEq)]
@@ -399,7 +400,7 @@ impl Component for MarqueeTitle {
                                 text_width.set(width);
                             }
                         })
-                        .child(title_label(self.text.clone())),
+                        .child(title_label(self.text.clone(), false)),
                 ),
             )
     }

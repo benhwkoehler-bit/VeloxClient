@@ -25,6 +25,19 @@ const IMPORT_EXCLUDE_TOP: &[&str] = &[
     "launcher_msa_credentials.bin",
     "launcher_profiles.json",
     "launcher_settings.json",
+    // Mojang launcher runtime, caches and logs: hundreds of MB the game never reads
+    "launcher",
+    "runtime",
+    "launcher_log.txt",
+    "launcher_cef_log.txt",
+    "launcher_ui_state.json",
+    "launcher_product_state.json",
+    "launcher_entitlements.json",
+    "launcher_gamer_pics.json",
+    "nativeUpdaterLog.txt",
+    "clientId_v2.txt",
+    "treatment_tags.json",
+    ".DS_Store",
     "usercache.json",
     "webcache",
     "webcache2",
@@ -142,6 +155,9 @@ mod tests {
             "launcher_accounts.json",
             "launcher_msa_credentials.bin",
             "cheatbreaker_accounts.json",
+            "launcher_log.txt",
+            "nativeUpdaterLog.txt",
+            "launcher_ui_state.json",
         ] {
             polyio::write(src.join(file), b"x".to_vec()).await.unwrap();
         }
@@ -159,6 +175,8 @@ mod tests {
             ("libraries", "com/foo/foo.jar"),
             ("assets", "objects/ab/abcdef"),
             ("logs", "latest.log"),
+            ("launcher", "game/runtime.bin"),
+            ("runtime", "java-runtime-delta/java"),
         ] {
             let path = src.join(dir).join(file);
             polyio::create_dir_all(path.parent().unwrap())
@@ -194,6 +212,11 @@ mod tests {
             "cheatbreaker_accounts.json",
             "feather-mods",
             "jre",
+            "launcher",
+            "runtime",
+            "launcher_log.txt",
+            "nativeUpdaterLog.txt",
+            "launcher_ui_state.json",
         ] {
             assert!(
                 !dst.join(skipped).exists(),

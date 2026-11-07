@@ -43,5 +43,4 @@ fn logo() -> impl IntoElement {
                 .size(32.)
                 .color(colors::fg_primary()),
         )
-        .child(theme::wordmark(170., 36., colors::fg_primary()))
 }

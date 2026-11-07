@@ -283,15 +283,16 @@ impl Component for EnableButton {
                         .small()
                         .height(Size::px(height))
                         .padding(Gaps::new_symmetric(0., 11.))
-                        .child(
-                            Icon::new(if running {
-                                IconType::Loading02
-                            } else {
-                                IconType::CheckCircle
-                            })
-                            .size(12.)
-                            .color(colors::fg_primary()),
-                        )
+                        .child(if running {
+                            crate::components::Spinner::new(12.)
+                                .color(colors::fg_primary())
+                                .into_element()
+                        } else {
+                            Icon::new(IconType::CheckCircle)
+                                .size(12.)
+                                .color(colors::fg_primary())
+                                .into_element()
+                        })
                         .child(
                             label()
                                 .text(if running {

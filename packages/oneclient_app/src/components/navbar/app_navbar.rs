@@ -97,9 +97,6 @@ fn navbar_left(show_logo: bool, over_art: bool) -> impl IntoElement {
                 .color(primary_color(over_art))
                 .into_element(),
         )
-        .maybe(show_logo, |rect| {
-            rect.child(NavbarLogo { over_art }.into_element())
-        })
 }
 
 fn primary_color(over_art: bool) -> Color {
@@ -117,17 +114,6 @@ fn secondary_color(over_art: bool) -> Color {
         theme::colors::fg_secondary_pressed()
     } else {
         theme::colors::fg_secondary()
-    }
-}
-
-#[derive(PartialEq)]
-struct NavbarLogo {
-    over_art: bool,
-}
-
-impl Component for NavbarLogo {
-    fn render(&self) -> impl IntoElement {
-        theme::wordmark(214., 44., primary_color(self.over_art))
     }
 }
 
@@ -224,9 +210,8 @@ impl Component for NavLink {
             secondary_color(over_art)
         };
 
-        let background = if active {
-            theme::colors::ghost_overlay()
-        } else if hovering() || focused().is_focused() {
+        // VeloxClient: the active page is marked `> home` instead of a filled pill
+        let background = if hovering() || focused().is_focused() {
             theme::colors::ghost_overlay_hover()
         } else {
             Color::TRANSPARENT
@@ -237,17 +222,9 @@ impl Component for NavLink {
             .main_align(Alignment::Center)
             .cross_align(Alignment::Center)
             .height(Size::px(36.))
-            .width(Size::px(nav_label.len() as f32 * 10. + 34.))
+            .width(Size::px(nav_label.len() as f32 * 10. + 54.))
             .corner_radius(rounded(10.))
             .background(background)
-            .maybe(active, |el| {
-                el.border(
-                    Border::new()
-                        .fill(theme::colors::component_border())
-                        .width(1.)
-                        .alignment(BorderAlignment::Inner),
-                )
-            })
             .a11y_id(a11y_id)
             .a11y_focusable(true)
             .a11y_role(AccessibilityRole::Button)
@@ -264,8 +241,9 @@ impl Component for NavLink {
             .on_pointer_out(move |_| hovering.set(false))
             .cursor(CursorIcon::Pointer)
             .child(
-                label()
-                    .text(nav_label)
+                paragraph()
+                    .maybe(active, |p| p.span(Span::new("> ").color(theme::colors::brand())))
+                    .span(Span::new(nav_label).color(color))
                     .font_size(text_size(16.))
                     .font_weight(if active {
                         FontWeight::MEDIUM

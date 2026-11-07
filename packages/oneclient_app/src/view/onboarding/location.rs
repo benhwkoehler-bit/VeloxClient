@@ -4,7 +4,9 @@ use freya::prelude::*;
 use freya::router::RouterContext;
 
 use crate::components::IconType;
-use crate::hooks::{use_dispatch, use_launcher, use_onboarding_selection};
+use crate::hooks::{
+    has_migration_data, use_dispatch, use_launcher, use_migration, use_onboarding_selection,
+};
 use crate::i18n::t;
 use crate::routes::Route;
 use crate::state::AppChannel;
@@ -22,6 +24,7 @@ impl Component for OnboardingLocation {
         let actions = use_dispatch();
         let launcher = use_launcher();
         let selection = use_onboarding_selection();
+        let next = crate::view::onboarding::after_location(has_migration_data(&use_migration()));
 
         let mut picked = use_state(|| None::<PathBuf>);
         let mut warning = use_state(|| None::<String>);
@@ -32,12 +35,12 @@ impl Component for OnboardingLocation {
         let settled = answered && launcher.ready;
 
         if !*selection.picks_location.read() && settled {
-            let _ = RouterContext::get().replace(Route::OnboardingTerms {});
+            let _ = RouterContext::get().replace(next.clone());
             return rect().into_element();
         }
 
         if *waiting.read() && launcher.ready {
-            let _ = RouterContext::get().replace(Route::OnboardingTerms {});
+            let _ = RouterContext::get().replace(next.clone());
             return rect().into_element();
         }
 
@@ -51,7 +54,7 @@ impl Component for OnboardingLocation {
             }
 
             if settled {
-                let _ = RouterContext::get().replace(Route::OnboardingTerms {});
+                let _ = RouterContext::get().replace(next.clone());
                 return;
             }
 

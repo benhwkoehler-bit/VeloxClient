@@ -106,11 +106,7 @@ impl RequestClient {
             .read_timeout(std::time::Duration::from_secs(30))
             .timeout(std::time::Duration::from_mins(10))
             .tls_backend_rustls()
-            .user_agent(format!(
-                "OneClient {} ({})",
-                env!("CARGO_PKG_VERSION"),
-                env!("CARGO_PKG_HOMEPAGE")
-            ));
+            .user_agent(oneclient_common::brand::user_agent());
 
         builder = builder.no_hickory_dns();
 

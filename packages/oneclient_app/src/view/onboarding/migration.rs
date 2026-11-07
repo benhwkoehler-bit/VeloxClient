@@ -143,11 +143,15 @@ impl Component for OnboardingMigration {
                             ),
                     ),
             ))
-            .child(migration_nav(bundles_loaded, move || {
-                categories.set(Some(migrated_categories(&detection.instances)));
+            .child(migration_nav(
+                crate::view::onboarding::before_migration(*selection.picks_location.read()),
+                bundles_loaded,
+                move || {
+                    categories.set(Some(migrated_categories(&detection.instances)));
 
-                let _ = RouterContext::get().replace(Route::OnboardingLanguage {});
-            }))
+                    let _ = RouterContext::get().replace(Route::OnboardingLanguage {});
+                },
+            ))
             .into_element()
     }
 }
@@ -402,7 +406,11 @@ fn import_choice_card(
 }
 
 /// Like `onboarding_nav` but Next runs `on_next` (apply migration + navigate) instead of a plain route replace
-fn migration_nav(next_enabled: bool, on_next: impl FnMut() + 'static) -> impl IntoElement {
+fn migration_nav(
+    back: Route,
+    next_enabled: bool,
+    on_next: impl FnMut() + 'static,
+) -> impl IntoElement {
     let mut on_next = on_next;
     rect()
         .horizontal()
@@ -416,7 +424,7 @@ fn migration_nav(next_enabled: bool, on_next: impl FnMut() + 'static) -> impl In
                 .secondary()
                 .width(Size::px(128.))
                 .on_press(move |_| {
-                    let _ = RouterContext::get().replace(Route::OnboardingTerms {});
+                    let _ = RouterContext::get().replace(back.clone());
                 })
                 .text(t("oneclient.common.back")),
         )

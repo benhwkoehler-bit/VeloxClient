@@ -67,7 +67,7 @@ fn wizard_rail(wizard: Wizard, picks: &Picks) -> Element {
         match picks.choice {
             TypeChoice::OneClient => match &picks.versions.chosen {
                 Some(version) => format!("OneClient · {version}"),
-                None => "OneClient".to_string(),
+                None => oneclient_common::brand::APP_NAME.to_string(),
             },
             TypeChoice::Scratch => match &picks.versions.chosen {
                 Some(version) => format!("{version} · {}", picks.loader_label()),

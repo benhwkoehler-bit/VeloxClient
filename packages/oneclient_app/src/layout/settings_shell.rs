@@ -57,7 +57,7 @@ struct SearchItem {
 
 // TODO Replace this with inventory crate or something
 fn search_index() -> Vec<SearchItem> {
-    vec![
+    let items = vec![
         SearchItem {
             id: "launcher.discord_rpc",
             icon: IconType::Link03,
@@ -284,7 +284,12 @@ fn search_index() -> Vec<SearchItem> {
             keywords: &["changelog", "release notes", "updates"],
             route: Route::SettingsChangelog {},
         },
-    ]
+    ];
+    // VeloxClient: Discord Rich Presence is off, so its setting is not searchable
+    items
+        .into_iter()
+        .filter(|item| oneclient_common::brand::DISCORD_RPC || item.id != "launcher.discord_rpc")
+        .collect()
 }
 
 #[derive(PartialEq, Clone, Copy)]

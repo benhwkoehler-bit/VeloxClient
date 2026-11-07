@@ -41,6 +41,13 @@ impl NetConfig {
         if let Some(value) = non_empty(meta_url_base) {
             self.meta_url_base = value;
         }
+        // VeloxClient: debug builds can point at a local data folder for testing,
+        // e.g. VELOX_META_URL_BASE=http://127.0.0.1:8787
+        if cfg!(debug_assertions)
+            && let Some(value) = non_empty(std::env::var("VELOX_META_URL_BASE").ok().as_deref())
+        {
+            self.meta_url_base = value;
+        }
         self.meta_url_base = self.meta_url_base.trim_end_matches('/').to_string();
         self
     }

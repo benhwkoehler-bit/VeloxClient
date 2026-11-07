@@ -110,7 +110,7 @@ impl Component for Startup {
                 Route::OnboardingWelcome {}
             } else if settings.settings.declined_tos {
                 Route::Home {}
-            } else if stale {
+            } else if stale && oneclient_common::brand::POLYFROST_SERVICES {
                 Route::OnboardingTerms {}
             } else {
                 Route::Home {}

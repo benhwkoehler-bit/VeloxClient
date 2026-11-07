@@ -1,5 +1,5 @@
 mod analytics;
-mod clusters;
+pub(crate) mod clusters;
 mod debug;
 mod home;
 mod stats;

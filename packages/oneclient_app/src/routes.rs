@@ -24,9 +24,9 @@ use crate::view::{
         },
     },
     onboarding::{
-        OnboardingAccount, OnboardingBundles, OnboardingLanguage, OnboardingLocation,
-        OnboardingMigration, OnboardingPreferences, OnboardingSummary, OnboardingTerms,
-        OnboardingWelcome,
+        OnboardingAccount, OnboardingBundles, OnboardingImport, OnboardingLanguage, OnboardingLocation,
+        OnboardingMigration, OnboardingPreferences, OnboardingRenderer, OnboardingSummary,
+        OnboardingTerms, OnboardingWelcome,
     },
 };
 
@@ -50,10 +50,14 @@ pub enum Route {
             OnboardingMigration {},
             #[route("/onboarding/language")]
             OnboardingLanguage {},
+            #[route("/onboarding/import")]
+            OnboardingImport {},
             #[route("/onboarding/account")]
             OnboardingAccount {},
             #[route("/onboarding/preferences")]
             OnboardingPreferences {},
+            #[route("/onboarding/renderer")]
+            OnboardingRenderer {},
             #[route("/onboarding/bundles")]
             OnboardingBundles {},
             #[route("/onboarding/summary")]
@@ -147,8 +151,10 @@ impl Route {
             Route::OnboardingTerms { .. } => t("oneclient.routes.onboarding_terms"),
             Route::OnboardingMigration { .. } => t("oneclient.routes.onboarding_migration"),
             Route::OnboardingLanguage { .. } => t("oneclient.routes.onboarding_language"),
+            Route::OnboardingImport { .. } => t("oneclient.routes.onboarding_import"),
             Route::OnboardingAccount { .. } => t("oneclient.routes.onboarding_account"),
             Route::OnboardingPreferences { .. } => t("oneclient.routes.onboarding_preferences"),
+            Route::OnboardingRenderer { .. } => t("oneclient.routes.onboarding_renderer"),
             Route::OnboardingBundles { .. } => t("oneclient.routes.onboarding_bundles"),
             Route::OnboardingSummary { .. } => t("oneclient.routes.onboarding_summary"),
             Route::Home { .. } => t("oneclient.routes.home"),

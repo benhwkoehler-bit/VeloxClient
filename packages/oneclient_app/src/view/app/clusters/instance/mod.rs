@@ -10,6 +10,7 @@ mod data;
 mod details;
 mod edit;
 mod import;
+pub(crate) use import::ImportStep;
 mod import_review;
 mod model;
 mod rail;

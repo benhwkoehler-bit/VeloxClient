@@ -1,3 +1,4 @@
+use freya::animation::{AnimNum, Ease, Function, use_animation_transition};
 use freya::prelude::*;
 use oneclient_core::clusters::Cluster;
 
@@ -77,6 +78,10 @@ impl PartialEq for VersionCard {
     }
 }
 
+const ART_FADE_MS: u64 = 180;
+const ART_ZOOM_MS: u64 = 420;
+const ART_HOVER_ZOOM: f32 = 1.06;
+
 impl Component for VersionCard {
     fn render(&self) -> impl IntoElement {
         let mut hovering = use_state(|| false);
@@ -97,6 +102,29 @@ impl Component for VersionCard {
         } else {
             0.6
         };
+        // VeloxClient: art fades and slowly zooms in on hover instead of snapping.
+        let art_opacity = use_animation_transition(art_opacity, |from, to| {
+            AnimNum::new(from, to)
+                .time(ART_FADE_MS)
+                .function(Function::Quad)
+                .ease(Ease::Out)
+        })
+        .read()
+        .value();
+        let art_zoom = use_animation_transition(hovered || focused, |from, zoomed| {
+            let (start, end) = match (from == zoomed, zoomed) {
+                (true, true) => (ART_HOVER_ZOOM, ART_HOVER_ZOOM),
+                (true, false) => (1., 1.),
+                (false, true) => (1., ART_HOVER_ZOOM),
+                (false, false) => (ART_HOVER_ZOOM, 1.),
+            };
+            AnimNum::new(start, end)
+                .time(ART_ZOOM_MS)
+                .function(Function::Expo)
+                .ease(Ease::Out)
+        })
+        .read()
+        .value();
 
         let border = if selected || focused {
             border_all_color(2., colors::brand())
@@ -135,6 +163,7 @@ impl Component for VersionCard {
                     .height(Size::fill())
                     .position(Position::new_absolute())
                     .opacity(art_opacity)
+                    .scale((art_zoom, art_zoom))
                     .child(self.art.clone()),
             )
             .child(
@@ -155,11 +184,15 @@ impl Component for VersionCard {
                             .stop((Color::from_af32rgb(0.95, 11, 16, 19), 100.)),
                     )
                     .child(
-                        label()
-                            .text(self.title.clone())
-                            .font_size(text_size(22.))
-                            .font_weight(FontWeight::SEMI_BOLD)
-                            .color(Color::WHITE),
+                        // VeloxClient: the picked card reads `# 26.3 Fabric`
+                        paragraph()
+                            .font_size(text_size(18.))
+                            .max_lines(1)
+                            .text_overflow(TextOverflow::Ellipsis)
+                            .maybe(self.selected, |p| {
+                                p.span(Span::new("# ").color(colors::brand()))
+                            })
+                            .span(Span::new(self.title.clone()).color(Color::WHITE)),
                     )
                     .child(
                         label()

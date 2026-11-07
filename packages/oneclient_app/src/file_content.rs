@@ -117,7 +117,7 @@ pub fn info_plist(name: &str, executable: &str, folder: &str, icon: Option<&str>
          <dict>\n\
          \t<key>CFBundleName</key>\n\t<string>{display}</string>\n\
          \t<key>CFBundleDisplayName</key>\n\t<string>{display}</string>\n\
-         \t<key>CFBundleIdentifier</key>\n\t<string>org.polyfrost.OneClient.shortcut.{slug}</string>\n\
+         \t<key>CFBundleIdentifier</key>\n\t<string>dev.veloxclient.VeloxClient.shortcut.{slug}</string>\n\
          \t<key>CFBundleExecutable</key>\n\t<string>{executable}</string>\n\
          {icon_entry}\
          \t<key>CFBundlePackageType</key>\n\t<string>APPL</string>\n\

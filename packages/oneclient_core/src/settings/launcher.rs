@@ -70,6 +70,8 @@ pub struct LauncherSettings {
     pub dynamic_background_enabled: bool,
     pub start_maximized: bool,
     pub animations_enabled: bool,
+    /// VeloxClient: render with Pure Metal next to Sodium (Apple Silicon only, Minecraft 26.3).
+    pub metal_renderer: bool,
     pub theme: String,
     pub accent_color: Option<String>,
     pub language: Option<String>,
@@ -133,6 +135,7 @@ impl Default for LauncherSettings {
             dynamic_background_enabled: true,
             start_maximized: false,
             animations_enabled: true,
+            metal_renderer: false,
             theme: "dark".to_string(),
             accent_color: None,
             language: None,

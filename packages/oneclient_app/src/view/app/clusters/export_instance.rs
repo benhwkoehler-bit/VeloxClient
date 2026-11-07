@@ -676,7 +676,7 @@ fn save_view(
         (
             ExportMode::OneClient,
             IconType::IconLogo,
-            "OneClient",
+            oneclient_common::brand::APP_NAME,
             Some(t("oneclient.clusters.export.oneclient.badge")),
             t("oneclient.clusters.export.oneclient.blurb"),
         ),

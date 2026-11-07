@@ -10,6 +10,7 @@ mod imported_modpacks;
 mod modpack_settings;
 mod mods;
 mod process_logs;
+pub(crate) mod renderer_switch;
 mod screenshots;
 mod shaders;
 mod textures;

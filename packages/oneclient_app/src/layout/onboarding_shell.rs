@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+use freya::animation::*;
 use freya::prelude::*;
 use freya::router::{Outlet, use_route};
 
@@ -108,6 +109,9 @@ impl Component for OnboardingShell {
                             .width(Size::fill())
                             .height(Size::flex(1.0))
                             .overflow(Overflow::Clip)
+                            .child(Aura {
+                                still: *reduce_motion.read(),
+                            })
                             .child(Outlet::<Route>::new())
                             .child(copyright(chrome)),
                     ),
@@ -115,19 +119,71 @@ impl Component for OnboardingShell {
     }
 }
 
+/// VeloxClient: one pixel block per step, done steps in purple
 fn progress_bar(step_index: usize, total: usize) -> impl IntoElement {
-    let filled = ((step_index + 1) as f32 / total as f32) * 100.;
-
-    rect()
-        .width(Size::fill())
-        .height(Size::px(3.))
-        .background(colors::ghost_overlay_hover())
-        .child(
+    rect().width(Size::fill()).padding(Gaps::new(10., 24., 0., 24.)).child(
+        rect()
+            .horizontal()
+            .width(Size::fill())
+            .height(Size::px(PROGRESS_BLOCK_HEIGHT))
+            .content(Content::Flex)
+            .spacing(PROGRESS_BLOCK_GAP)
+            .children((0..total).map(|i| {
             rect()
-                .width(Size::percent(filled))
+                .width(Size::flex(1.0))
                 .height(Size::fill())
-                .background(colors::brand()),
-        )
+                .background(if i <= step_index {
+                    colors::brand()
+                } else {
+                    colors::ghost_overlay_hover()
+                })
+                .into_element()
+        })),
+    )
+}
+
+const PROGRESS_BLOCK_HEIGHT: f32 = 6.;
+const PROGRESS_BLOCK_GAP: f32 = 4.;
+const AURA_BREATH_MS: u64 = 6000;
+const AURA_SIZE: f32 = 900.;
+
+/// A slow purple glow behind the wizard; holds still with reduced motion
+#[derive(PartialEq)]
+struct Aura {
+    still: bool,
+}
+
+impl Component for Aura {
+    fn render(&self) -> impl IntoElement {
+        let breath = use_animation(|conf| {
+            conf.on_creation(OnCreation::Run);
+            conf.on_finish(OnFinish::reverse());
+            AnimNum::new(0.55, 1.)
+                .time(AURA_BREATH_MS)
+                .ease(Ease::InOut)
+                .function(Function::Sine)
+        });
+        let strength = if self.still { 0.8 } else { breath.get().value() };
+
+        rect()
+            .position(Position::new_absolute())
+            .width(Size::fill())
+            .height(Size::fill())
+            .center()
+            .interactive(false)
+            .child(
+                rect()
+                    .width(Size::px(AURA_SIZE))
+                    .height(Size::px(AURA_SIZE * 0.66))
+                    .opacity(strength)
+                    .background(
+                        RadialGradient::new()
+                            .stop((colors::brand().with_a(72), 0.))
+                            .stop((colors::brand().with_a(22), 45.))
+                            .stop((colors::brand().with_a(0), 72.)),
+                    ),
+            )
+    }
 }
 
 fn copyright(opacity: f32) -> impl IntoElement {

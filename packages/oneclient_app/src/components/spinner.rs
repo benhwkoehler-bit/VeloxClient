@@ -9,11 +9,19 @@ const SPIN_TIME: u64 = 900;
 #[derive(PartialEq)]
 pub struct Spinner {
     size: f32,
+    color: Option<Color>,
 }
 
 impl Spinner {
     pub fn new(size: f32) -> Self {
-        Self { size }
+        Self { size, color: None }
+    }
+
+    /// Spinner in a specific colour (defaults to the secondary text colour).
+    #[must_use]
+    pub fn color(mut self, color: Color) -> Self {
+        self.color = Some(color);
+        self
     }
 }
 
@@ -30,7 +38,7 @@ impl Component for Spinner {
         rect().rotate(spin.get().value()).child(
             Icon::new(IconType::Loading02)
                 .size(self.size)
-                .color(colors::fg_secondary()),
+                .color(self.color.unwrap_or_else(colors::fg_secondary)),
         )
     }
 }

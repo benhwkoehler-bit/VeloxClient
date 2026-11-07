@@ -96,13 +96,13 @@ windows = { version = "=0.62.2", features = [
 winresource = "=0.1.31"
 
 [package.metadata.packager]
-product-name = "OneClient"
-identifier = "org.polyfrost.OneClient"
+product-name = "VeloxClient"
+identifier = "dev.veloxclient.VeloxClient"
 category = "Game"
-publisher = "Polyfrost Inc."
-copyright = "© 2026 Polyfrost Inc."
-homepage = "https://polyfrost.org/projects/oneclient"
-long-description = "Next-generation open source Minecraft launcher"
+publisher = "VeloxClient"
+copyright = "GPL-3.0 · based on OneClient © 2026 Polyfrost Inc."
+homepage = "https://github.com/VeloxClient"
+long-description = "Lightweight, performance-focused Minecraft launcher based on OneClient"
 formats = ["nsis", "app", "dmg", "deb", "appimage"]
 binaries = [{ path = "oneclient_app", main = true }]
 icons = [
@@ -114,7 +114,6 @@ icons = [
   "icons/icon.ico",
 ]
 resources = [
-  { src = "icons/generated/Assets.car", target = "Assets.car" },
   # >>> CRT_RESOURCES >>>
   # <<< CRT_RESOURCES <<<
 ]

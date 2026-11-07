@@ -2,6 +2,7 @@ mod cluster_picker;
 mod delete_instance;
 mod export_instance;
 mod instance;
+pub(crate) use instance::ImportStep;
 mod page;
 mod reset_instance;
 

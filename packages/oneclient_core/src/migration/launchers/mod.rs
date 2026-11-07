@@ -1,5 +1,5 @@
 //! Imports instances from third-party launchers (Prism and its MultiMC
-//! relatives, the Modrinth App)
+//! relatives, the Modrinth App and, for VeloxClient, NoRisk and Lunar)
 //!
 //! Unlike the onboarding migration these never map onto OneClient's curated
 //! clusters: every imported instance becomes its own isolated cluster with its
@@ -9,7 +9,9 @@ mod archive;
 mod import;
 mod ini;
 mod java;
+pub mod lunar;
 pub mod modrinth_app;
+pub mod norisk;
 pub mod prism;
 mod screen;
 
@@ -36,6 +38,8 @@ pub enum ExternalLauncher {
     PolyMc,
     MultiMc,
     ModrinthApp,
+    NoRisk,
+    Lunar,
 }
 
 impl ExternalLauncher {
@@ -45,6 +49,8 @@ impl ExternalLauncher {
             Self::PolyMc => "polymc",
             Self::MultiMc => "multimc",
             Self::ModrinthApp => "modrinth_app",
+            Self::NoRisk => "norisk",
+            Self::Lunar => "lunar",
         }
     }
 
@@ -54,6 +60,8 @@ impl ExternalLauncher {
             Self::PolyMc => "PolyMC",
             Self::MultiMc => "MultiMC",
             Self::ModrinthApp => "Modrinth App",
+            Self::NoRisk => "NoRisk Client",
+            Self::Lunar => "Lunar Client",
         }
     }
 }
@@ -182,7 +190,34 @@ pub async fn detect_all() -> Vec<ExternalDetection> {
         }
     }
 
+    if let Some(root) = norisk::default_root() {
+        let detected = norisk::detect_at(&root).await;
+        push_detection(&mut found, ExternalLauncher::NoRisk, root, detected);
+    }
+    if let Some(root) = lunar::default_root() {
+        let detected = lunar::detect_at(&root).await;
+        push_detection(&mut found, ExternalLauncher::Lunar, root, detected);
+    }
+
     found
+}
+
+/// Keeps a detection that found instances; an unreadable install is listed
+/// with its problem so it does not silently vanish
+fn push_detection(
+    found: &mut Vec<ExternalDetection>,
+    launcher: ExternalLauncher,
+    root: PathBuf,
+    detected: LauncherResult<Option<ExternalDetection>>,
+) {
+    match detected {
+        Ok(Some(detection)) if !detection.instances.is_empty() => found.push(detection),
+        Ok(_) => {}
+        Err(err) => {
+            tracing::warn!(root = %root.display(), error = %err, "could not read {} install", launcher.display_name());
+            found.push(ExternalDetection::unreadable(launcher, root, &err));
+        }
+    }
 }
 
 /// For portable installs the user points at by hand
@@ -193,6 +228,12 @@ pub async fn detect_folder(root: PathBuf) -> LauncherResult<Option<ExternalDetec
     }
     if let Some(launcher) = prism::looks_like_root(&root) {
         return prism::detect_at(launcher, &root).await;
+    }
+    if norisk::looks_like_root(&root) {
+        return norisk::detect_at(&root).await;
+    }
+    if lunar::looks_like_root(&root) {
+        return lunar::detect_at(&root).await;
     }
     Ok(None)
 }

@@ -343,7 +343,11 @@ impl Component for OnboardingBundles {
                     ),
             ))
             .child(onboarding_nav(
-                Some(Route::OnboardingAccount {}),
+                Some(if crate::view::onboarding::shows_renderer_step() {
+                    Route::OnboardingRenderer {}
+                } else {
+                    Route::OnboardingAccount {}
+                }),
                 Route::OnboardingPreferences {},
                 bundles_loaded,
             ))

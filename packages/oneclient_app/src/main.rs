@@ -139,8 +139,21 @@ impl App for OneClientApp {
     }
 }
 
+/// VeloxClient (debug builds only): run against a separate, empty launcher
+/// folder to walk through the first start without touching the real one.
+/// Used by `tools/test-first-start.sh`.
+#[cfg(debug_assertions)]
+fn apply_test_launcher_dir() {
+    if let Some(dir) = std::env::var_os("VELOX_LAUNCHER_DIR").filter(|dir| !dir.is_empty()) {
+        oneclient_common::paths::set_launcher_dir(dir.into());
+    }
+}
+
 fn main() {
     let cli = cli::parse();
+
+    #[cfg(debug_assertions)]
+    apply_test_launcher_dir();
 
     let mut builder = Builder::new_multi_thread();
     builder.enable_all().max_blocking_threads(64);

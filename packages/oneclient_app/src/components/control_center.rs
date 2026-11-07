@@ -91,11 +91,15 @@ impl Component for ControlPanel {
                         target: Route::SettingsLauncher {},
                     }),
             )
-            .child(section_label(t(
-                "oneclient.components.control_center.quick_settings",
-            )))
-            .child(QuickSettings)
-            .child(divider())
+            // VeloxClient: the only quick setting is Discord Rich Presence, which is off
+            .maybe(oneclient_common::brand::DISCORD_RPC, |panel| {
+                panel
+                    .child(section_label(t(
+                        "oneclient.components.control_center.quick_settings",
+                    )))
+                    .child(QuickSettings)
+                    .child(divider())
+            })
             .child(PanelFooter)
     }
 }

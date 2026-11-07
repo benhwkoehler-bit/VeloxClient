@@ -302,11 +302,7 @@ fn status_row(status: Option<LoginProgress>, error: Option<String>) -> impl Into
         .horizontal()
         .cross_align(Alignment::Center)
         .spacing(6.)
-        .child(
-            Icon::new(IconType::Loading02)
-                .size(13.)
-                .color(colors::brand()),
-        )
+        .child(crate::components::Spinner::new(13.).color(colors::brand()))
         .child(
             label()
                 .text(text)

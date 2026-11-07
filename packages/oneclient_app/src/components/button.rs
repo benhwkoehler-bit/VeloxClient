@@ -1,7 +1,14 @@
 #![allow(dead_code)]
 use std::borrow::Cow;
 
+use freya::animation::{AnimColor, AnimNum, Ease, Function, use_animation_transition};
 use freya::prelude::*;
+
+/// VeloxClient: hover/press colours fade instead of snapping.
+const COLOR_FADE_MS: u64 = 140;
+/// VeloxClient: buttons sink slightly while held down.
+const PRESS_SCALE: f32 = 0.96;
+const PRESS_MS: u64 = 110;
 
 use crate::{
     components::{Icon, IconTint, IconType, TooltipPlacement, tooltip::use_tooltip_anchor},
@@ -297,6 +304,30 @@ impl Component for Button {
         } else {
             palette.background
         };
+        let background = use_animation_transition(background, |from, to| {
+            AnimColor::new(from, to)
+                .time(COLOR_FADE_MS)
+                .function(Function::Quad)
+                .ease(Ease::Out)
+        })
+        .read()
+        .value();
+
+        let pressed_down = pressing() && enabled();
+        let press_scale = use_animation_transition(pressed_down, |from, down| {
+            // No pop-in on first render: only animate real press/release changes.
+            let (start, end) = match (from == down, down) {
+                (true, _) => (1., 1.),
+                (false, true) => (1., PRESS_SCALE),
+                (false, false) => (PRESS_SCALE, 1.),
+            };
+            AnimNum::new(start, end)
+                .time(PRESS_MS)
+                .function(Function::Quad)
+                .ease(Ease::Out)
+        })
+        .read()
+        .value();
 
         let foreground = if enabled() {
             self.foreground.unwrap_or(palette.foreground)
@@ -336,7 +367,10 @@ impl Component for Button {
 
         rect.style_mut().clone_from(&self.style);
 
-        rect = rect.background(background).color(foreground);
+        rect = rect
+            .background(background)
+            .color(foreground)
+            .scale((press_scale, press_scale));
 
         if !enabled() {
             rect = rect.opacity(colors::disabled_opacity());

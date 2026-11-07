@@ -54,7 +54,8 @@ const COPY_EXCLUDE_TOP: &[&str] = &[
 ];
 
 /// Launcher bookkeeping inside the mods folder, meaningless to OneClient
-const MODS_SKIP: &[&str] = &[".index", ".connector"];
+/// `dependencies`: Lunar Client unpacks its own libraries there; they are not mods
+const MODS_SKIP: &[&str] = &[".index", ".connector", "dependencies"];
 
 /// Held open by a running game on Windows and recreated on every world load
 const COPY_SKIP_FILES: &[&str] = &["session.lock"];

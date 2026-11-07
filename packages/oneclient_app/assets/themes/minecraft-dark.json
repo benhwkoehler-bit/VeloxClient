@@ -1,19 +1,19 @@
 {
-  "name": "Minecraft Dark",
+  "name": "Velox Pixel Dark",
   "radius_scale": 0,
-  "font": "Minecraft",
-  "mono_font": "Minecraft",
+  "font": "Monocraft",
+  "mono_font": "Monocraft",
   "pixel_font_size": 10,
   "pixel_icons": true,
   "colors": {
     "light": false,
-    "page": "#11171C",
-    "page_elevated": "#171F24",
-    "card": "#1A2229",
-    "component": "#1E262B",
-    "border": "#FFFFFF1A",
-    "text": "#D5DBFF",
-    "text_secondary": "#757883",
-    "accent": "#2B4BFF"
+    "page": "#0B0B10",
+    "page_elevated": "#13131B",
+    "card": "#16161F",
+    "component": "#20202C",
+    "border": "#FFFFFF14",
+    "text": "#ECEAF5",
+    "text_secondary": "#8A879B",
+    "accent": "#7C3AED"
   }
 }

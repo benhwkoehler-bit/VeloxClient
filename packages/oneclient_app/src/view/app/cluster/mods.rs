@@ -122,7 +122,13 @@ impl Component for ClusterMods {
             !folded.contains(&(index - 1))
         });
 
+        let renderer_switch = super::renderer_switch::ships_pure_metal(&bundle_items)
+            .then(|| super::renderer_switch::RendererSwitch {
+                cluster_id: self.cluster_id,
+            });
+
         cluster_content()
+            .maybe_child(renderer_switch)
             .child(ModsFolderSync {
                 cluster_id: self.cluster_id,
                 folder: oneclient_common::paths::cluster_mods_dir(&cluster.folder_name).ok(),

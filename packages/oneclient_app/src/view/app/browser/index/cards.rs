@@ -528,15 +528,16 @@ impl Component for InstallButton {
                             }
                         }
                     })
-                    .child(
-                        Icon::new(if installing {
-                            IconType::Loading02
-                        } else {
-                            IconType::Plus
-                        })
-                        .size(12.)
-                        .color(colors::fg_primary()),
-                    )
+                    .child(if installing {
+                        crate::components::Spinner::new(12.)
+                            .color(colors::fg_primary())
+                            .into_element()
+                    } else {
+                        Icon::new(IconType::Plus)
+                            .size(12.)
+                            .color(colors::fg_primary())
+                            .into_element()
+                    })
                     .child(
                         label()
                             .text(match (installing, add_to_cluster) {

@@ -105,12 +105,14 @@ impl Component for SettingsLauncher {
             .child(section_header(t(
                 "oneclient.settings.launcher.section.general",
             )))
-            .child(settings_row(
-                IconType::Link03,
-                t("oneclient.settings.launcher.discord_rpc.title"),
-                t("oneclient.settings.launcher.discord_rpc.description"),
-                resettable(toggle(discord_rpc), discord_rpc, defaults.discord_enabled),
-            ))
+            .maybe(oneclient_common::brand::DISCORD_RPC, |page| {
+                page.child(settings_row(
+                    IconType::Link03,
+                    t("oneclient.settings.launcher.discord_rpc.title"),
+                    t("oneclient.settings.launcher.discord_rpc.description"),
+                    resettable(toggle(discord_rpc), discord_rpc, defaults.discord_enabled),
+                ))
+            })
             .child(settings_row(
                 IconType::AlertTriangle,
                 t("oneclient.settings.launcher.crash_reporting.title"),

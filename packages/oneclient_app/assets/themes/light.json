@@ -1,14 +1,17 @@
 {
-  "name": "PolyGlass Light",
+  "name": "Velox Light",
+  "radius_scale": 0.4,
+  "font": "Monocraft",
+  "pixel_font_size": 10,
   "colors": {
     "light": true,
-    "page": "#D0D7F3",
-    "page_elevated": "#D9E0F7",
-    "card": "#E3EAFB",
-    "component": "#EBF2FF",
-    "border": "#A3A3A34D",
-    "text": "#000000",
-    "text_secondary": "#4E5661",
-    "accent": "#2B4BFF"
+    "page": "#F4F2FA",
+    "page_elevated": "#FAF9FD",
+    "card": "#FFFFFF",
+    "component": "#EDE9F8",
+    "border": "#1E1B2E1F",
+    "text": "#14121C",
+    "text_secondary": "#5E5A70",
+    "accent": "#6D28D9"
   }
 }

@@ -1466,7 +1466,7 @@ impl Component for MigrateFromRow {
             });
         button = if checking {
             button
-                .child(Icon::new(IconType::Loading02).size(14.))
+                .child(crate::components::Spinner::new(14.).color(colors::fg_primary()))
                 .text(t("oneclient.cluster.settings.migrate.checking"))
         } else {
             button

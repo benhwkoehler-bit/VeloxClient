@@ -22,7 +22,7 @@ pub fn decline() {
 
 #[must_use]
 pub fn declined() -> bool {
-    DECLINED.load(Ordering::Relaxed)
+    !crate::brand::POLYFROST_SERVICES || DECLINED.load(Ordering::Relaxed)
 }
 
 #[must_use]

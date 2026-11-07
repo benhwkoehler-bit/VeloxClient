@@ -43,8 +43,8 @@ impl Component for OnboardingAccount {
             onboarding_illustration(IconType::OnboardingAccount),
             content,
             onboarding_nav(
-                Some(Route::OnboardingLanguage {}),
-                Route::OnboardingBundles {},
+                Some(Route::OnboardingImport {}),
+                crate::view::onboarding::after_account(),
                 has_account,
             ),
         );

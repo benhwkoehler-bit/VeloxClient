@@ -5,14 +5,7 @@ use std::sync::OnceLock;
 use crate::domain::{ContentType, ProviderId};
 use crate::error::{PathsError, PathsResult};
 
-const QUALIFIER: &str = "org";
-const ORGANIZATION: &str = "Polyfrost";
-
-#[cfg(not(debug_assertions))]
-const APPLICATION: &str = "OneClient";
-
-#[cfg(debug_assertions)]
-const APPLICATION: &str = "OneClient-dev";
+use crate::brand::{APPLICATION, ORGANIZATION, QUALIFIER};
 
 pub const SETTINGS_FILE: &str = "settings.json";
 pub const DATABASE_FILE: &str = "user_data.db";
@@ -314,7 +307,7 @@ mod tests {
         assert_eq!(
             tail,
             vec![OsStr::new(APPLICATION), OsStr::new(ORGANIZATION)],
-            "every Polyfrost product shares one folder and takes a single name inside it"
+            "VeloxClient keeps one organization folder with a single app name inside it"
         );
     }
 
@@ -336,9 +329,9 @@ mod tests {
         assert_eq!(
             APPLICATION,
             if cfg!(debug_assertions) {
-                "OneClient-dev"
+                "VeloxClient-dev"
             } else {
-                "OneClient"
+                "VeloxClient"
             }
         );
     }

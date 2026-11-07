@@ -85,7 +85,8 @@ impl LauncherState {
             services.requester.clone(),
             services.events.clone(),
         );
-        let discord = DiscordRpc::spawn(settings.discord_enabled);
+        let discord =
+            DiscordRpc::spawn(settings.discord_enabled && oneclient_common::brand::DISCORD_RPC);
 
         let clusters = ClusterManager::new(services.db.clone());
 

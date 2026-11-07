@@ -41,6 +41,36 @@ pub struct LaunchedGame {
     pub pid: Option<u32>,
 }
 
+/// Pure Metal hands frames straight to the window by default and only falls
+/// back to a staging copy after that fails a few times, which shows as white
+/// flashes while a world loads. Starting on the staging copy avoids them; a
+/// value the user set in the launch arguments wins.
+const PURE_METAL_DIRECT_PRESENT: &str = "-Dpuremetal.directPresent";
+
+/// Pure Metal only exists for Apple Silicon; elsewhere the setting is ignored.
+fn metal_renderer_active(state: &LauncherState) -> bool {
+    cfg!(all(target_os = "macos", target_arch = "aarch64")) && state.settings.read().metal_renderer
+}
+
+/// Pure Metal only runs when the game's graphics API is "Default". Minecraft
+/// switches it to Vulkan by itself after a start that did not finish cleanly,
+/// which would silently turn Pure Metal off, so that fallback is undone here.
+/// A deliberate OpenGL choice is left alone.
+async fn undo_vulkan_fallback(cluster: &Cluster) {
+    use oneclient_common::domain::GraphicsBackend;
+
+    let Ok(game_dir) = cluster.game_dir() else {
+        return;
+    };
+    if crate::game::read_graphics_backend(&game_dir).await != Some(GraphicsBackend::Vulkan) {
+        return;
+    }
+    match crate::game::write_graphics_backend(&game_dir, GraphicsBackend::Default).await {
+        Ok(()) => tracing::info!(cluster_id = cluster.id, "graphics API set back to Default for Pure Metal"),
+        Err(err) => tracing::warn!(cluster_id = cluster.id, error = %err, "could not reset the graphics API for Pure Metal"),
+    }
+}
+
 #[tracing::instrument(skip(state, account))]
 pub async fn launch_cluster(
     state: &Arc<LauncherState>,
@@ -192,6 +222,24 @@ async fn start(
             }
         }
     };
+    let mut pure_metal_on = false;
+    if cluster.uses_bundles() {
+        match oneclient_content::bundles::apply_renderer(
+            cluster_id,
+            metal_renderer_active(state),
+            state.bundles.as_ref(),
+            &state.services.content(),
+        )
+        .await
+        {
+            Ok(true) => {
+                pure_metal_on = true;
+                undo_vulkan_fallback(&cluster).await;
+            }
+            Ok(false) => {}
+            Err(err) => tracing::warn!(cluster_id, error = %err, "failed to switch renderer mods"),
+        }
+    }
     if cluster.uses_bundles()
         && let Err(err) = oneclient_content::bundles::install_cluster_bundles(
             cluster_id,
@@ -295,9 +343,8 @@ async fn start(
     // Stats every library and the asset tree, the same work `plan_downloads`
     // already keeps off the runtime threads. `block_in_place` because
     // `VersionInfo` is not `Clone` and the sweep only reads it
-    let missing = tokio::task::block_in_place(|| {
-        game_files_missing(&version_info, &java.os_arch, updated)
-    });
+    let missing =
+        tokio::task::block_in_place(|| game_files_missing(&version_info, &java.os_arch, updated));
     match missing {
         Ok(true) => {
             tracing::info!(cluster_id, "missing game files; repairing");
@@ -407,6 +454,10 @@ async fn start(
         jvm_args.push(arg);
     }
 
+    if pure_metal_on && !jvm_args.iter().any(|arg| arg.starts_with(PURE_METAL_DIRECT_PRESENT)) {
+        jvm_args.push(format!("{PURE_METAL_DIRECT_PRESENT}=false"));
+    }
+
     let crash_dir = cluster.dir()?.join("crash-reports");
     polyio::create_dir_all(&crash_dir).await.ok();
     let error_file = crash_dir.join("hs_err_pid").display().to_string();
@@ -470,7 +521,7 @@ async fn start(
         .current_dir(&cwd);
 
     let header = format!(
-        "OneClient {} · {} · {version_name} · Java {}\n\n{}\n\n",
+        "VeloxClient {} · {} · {version_name} · Java {}\n\n{}\n\n",
         env!("CARGO_PKG_VERSION"),
         cluster.name,
         java.major,

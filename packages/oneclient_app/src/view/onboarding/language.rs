@@ -28,7 +28,9 @@ impl Component for OnboardingLanguage {
         let back = if has_migration_data(&migration_query) {
             Route::OnboardingMigration {}
         } else {
-            Route::OnboardingTerms {}
+            crate::view::onboarding::before_migration(
+                *use_onboarding_selection().picks_location.read(),
+            )
         };
 
         let rows: Vec<Element> = translations::choices()
@@ -44,7 +46,7 @@ impl Component for OnboardingLanguage {
             .width(Size::fill())
             .spacing(16.)
             .child(step_heading(
-                "OneClient",
+                oneclient_common::brand::APP_NAME,
                 t("oneclient.onboarding.welcome.subtitle"),
             ))
             .child(
@@ -67,7 +69,7 @@ impl Component for OnboardingLanguage {
         onboarding_page(
             onboarding_illustration(IconType::OnboardingLanguage),
             content,
-            onboarding_nav(Some(back), Route::OnboardingAccount {}, true),
+            onboarding_nav(Some(back), Route::OnboardingImport {}, true),
         )
     }
 }

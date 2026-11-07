@@ -198,6 +198,11 @@ pub enum ClusterAction {
         /// writes `Enabled` / `Disabled`
         manifest_default: bool,
     },
+    /// VeloxClient: Pure Metal on and Iris & co. off, or the other way round
+    SetRenderer {
+        cluster_id: ClusterId,
+        metal: bool,
+    },
     SetDirTarget {
         cluster_id: ClusterId,
         target: oneclient_core::clusters::DirTarget,
@@ -277,6 +282,7 @@ impl MutationCapability for ClusterMutation {
             | ClusterAction::RemoveBundlePackageFromDisk { cluster_id, .. }
             | ClusterAction::DeleteBundledArtifact { cluster_id, .. }
             | ClusterAction::SetBundlePackageEnabled { cluster_id, .. }
+            | ClusterAction::SetRenderer { cluster_id, .. }
             | ClusterAction::SetDirTarget { cluster_id, .. }
             | ClusterAction::VerifyFiles { cluster_id }
             | ClusterAction::DeleteInstance { cluster_id }
@@ -744,6 +750,26 @@ impl MutationCapability for ClusterMutation {
                         reason: t("oneclient.mutations.blocked.already_resetting").to_string(),
                     })
                 }
+            }
+            ClusterAction::SetRenderer { cluster_id, metal } => {
+                async {
+                    oneclient_content::bundles::apply_renderer(
+                        *cluster_id,
+                        *metal,
+                        state.bundles.as_ref(),
+                        content,
+                    )
+                    .await?;
+                    // Pure Metal may not be on disk yet; fetch it now instead of at launch
+                    oneclient_content::bundles::install_cluster_bundles(
+                        *cluster_id,
+                        state.bundles.as_ref(),
+                        None,
+                        content,
+                    )
+                    .await
+                }
+                .await
             }
             ClusterAction::Batch(_) => unreachable!(),
         };

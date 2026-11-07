@@ -1,14 +1,17 @@
 {
-  "name": "PolyGlass Dark",
+  "name": "Velox Dark",
+  "radius_scale": 0.4,
+  "font": "Monocraft",
+  "pixel_font_size": 10,
   "colors": {
     "light": false,
-    "page": "#11171C",
-    "page_elevated": "#151C22",
-    "card": "#1A2229",
-    "component": "#1A2229",
-    "border": "#FFFFFF1A",
-    "text": "#D5DBFF",
-    "text_secondary": "#757883",
-    "accent": "#2B4BFF"
+    "page": "#0B0B10",
+    "page_elevated": "#111118",
+    "card": "#16161F",
+    "component": "#1C1C27",
+    "border": "#FFFFFF14",
+    "text": "#ECEAF5",
+    "text_secondary": "#8A879B",
+    "accent": "#7C3AED"
   }
 }
