@@ -7,11 +7,20 @@ Based on [OneClient](https://github.com/Polyfrost/OneLauncher) by Polyfrost.
 
 ## Download
 
-**Windows:** [Download VeloxClient Beta](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
-(`VeloxClient-beta-windows-setup.exe`)
+[Download VeloxClient Beta](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
 
-The installer is not signed yet. If Windows shows "Windows protected your PC",
-click **More info → Run anyway**.
+| System | File |
+| --- | --- |
+| Windows | `VeloxClient-beta-windows-setup.exe` |
+| macOS (Apple Silicon, M1 or newer) | `VeloxClient-beta-macos-apple-silicon.dmg` |
+| macOS (Intel) | `VeloxClient-beta-macos-intel.dmg` |
+
+The builds are not signed yet:
+
+- **Windows:** if "Windows protected your PC" appears, click **More info → Run anyway**.
+- **macOS:** open the `.dmg` and drag VeloxClient into Applications. On first launch,
+  right-click the app and choose **Open**, or allow it under
+  **System Settings → Privacy & Security**.
 
 ## Features
 
@@ -36,8 +45,8 @@ cargo build -p oneclient_app --release
 ```
 
 Installers are built with [cargo-packager](https://github.com/crabnebula-dev/cargo-packager)
-(Windows: `nsis`, macOS: `app,dmg`). The Windows installer is built automatically by
-GitHub Actions on every push to `main`.
+(Windows: `nsis`, macOS: `app,dmg`). The Windows installer and the macOS disk images are built
+automatically by GitHub Actions on every push to `main`.
 
 ## License
 
