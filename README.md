@@ -1,46 +1,46 @@
 # VeloxClient
 
-Ein schneller, schlanker Minecraft-Launcher mit eigenem Performance-Pack.
-Basiert auf [OneClient](https://github.com/Polyfrost/OneLauncher) von Polyfrost.
+A fast, lightweight Minecraft launcher with its own performance pack.
+Based on [OneClient](https://github.com/Polyfrost/OneLauncher) by Polyfrost.
 
-> **Beta:** VeloxClient ist gerade in der Testphase für Freunde.
+> **Beta:** VeloxClient is currently in beta.
 
 ## Download
 
-**Windows:** [VeloxClient Beta herunterladen](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
+**Windows:** [Download VeloxClient Beta](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
 (`VeloxClient-beta-windows-setup.exe`)
 
-Der Installer ist noch nicht signiert. Wenn Windows „Der Computer wurde durch Windows geschützt“
-anzeigt: **Weitere Informationen → Trotzdem ausführen**.
+The installer is not signed yet. If Windows shows "Windows protected your PC",
+click **More info → Run anyway**.
 
-## Was VeloxClient kann
+## Features
 
-- **Velox Performance-Pack** für Minecraft 26.2 und 26.3 – eigene Packs für Windows und macOS,
-  Sodium, Lithium, FerriteCore und vieles mehr sind schon drin
-- **Wählbare Extras** beim ersten Start: Minimap, Weltkarte, AppleSkin, Chat Heads und mehr
-- **Pure Metal** auf Macs mit Apple Silicon (26.3): Minecraft läuft über Apples Metal, zusammen mit Sodium
-- **Profile übernehmen** aus Prism, MultiMC, Modrinth App, NoRisk und Lunar – die Originale bleiben unverändert
-- Ältere Versionen (1.8.9, 1.21.x, 26.1.2) laufen ohne Velox-Mods
-- Lila Design mit Pixel-Schrift (Monocraft) und Terminal-Look
+- **Velox performance pack** for Minecraft 26.2 and 26.3, with separate packs for Windows and macOS.
+  Sodium, Lithium, FerriteCore and many more are included out of the box
+- **Optional extras** on first start: minimap, world map, AppleSkin, Chat Heads and more
+- **Pure Metal** on Apple Silicon Macs (26.3): Minecraft renders through Apple's Metal, alongside Sodium
+- **Import your profiles** from Prism, MultiMC, Modrinth App, NoRisk and Lunar. The originals stay untouched
+- Older versions (1.8.9, 1.21.x, 26.1.2) run without Velox mods
+- Purple design with a pixel font (Monocraft) and a terminal look
 
-## Selbst bauen
+## Building
 
-Benötigt [Rust](https://rustup.rs/) 1.97 oder neuer.
+Requires [Rust](https://rustup.rs/) 1.97 or newer.
 
 ```sh
-# App starten
+# Run the app
 cargo run -p oneclient_app
 
-# Release-Build
+# Release build
 cargo build -p oneclient_app --release
 ```
 
-Installer werden mit [cargo-packager](https://github.com/crabnebula-dev/cargo-packager) gebaut
-(Windows: `nsis`, macOS: `app,dmg`). Der Windows-Installer entsteht automatisch über
-GitHub Actions bei jedem Push auf `main`.
+Installers are built with [cargo-packager](https://github.com/crabnebula-dev/cargo-packager)
+(Windows: `nsis`, macOS: `app,dmg`). The Windows installer is built automatically by
+GitHub Actions on every push to `main`.
 
-## Lizenz
+## License
 
-VeloxClient steht wie OneClient unter der [GPL-3.0](./LICENSE).
-Based on OneClient by Polyfrost – siehe auch [ATTRIBUTION.md](./ATTRIBUTION.md).
-Minecraft ist eine Marke von Mojang Studios. VeloxClient ist kein offizielles Minecraft-Produkt.
+Like OneClient, VeloxClient is licensed under the [GPL-3.0](./LICENSE).
+Based on OneClient by Polyfrost. See also [ATTRIBUTION.md](./ATTRIBUTION.md).
+Minecraft is a trademark of Mojang Studios. VeloxClient is not an official Minecraft product.
