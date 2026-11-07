@@ -166,7 +166,10 @@ jobs:
           cp -R "$APP_PATH" "$staging/"
           ln -s /Applications "$staging/Applications"
           mkdir -p dist
-          hdiutil create -volname "VeloxClient" -srcfolder "$staging" -ov -format UDZO \
+          # hdiutil's own size guess is sometimes too small for the signed
+          # bundle ("No space left on device"), so give it room explicitly.
+          size_mb=$(( $(du -sm "$staging" | cut -f1) * 2 + 50 ))
+          hdiutil create -volname "VeloxClient" -srcfolder "$staging" -ov -format UDZO -size "${size_mb}m" \
             "dist/VeloxClient-beta-macos-${{ matrix.label }}.dmg"
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
