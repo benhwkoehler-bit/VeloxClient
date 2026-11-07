@@ -101,7 +101,7 @@ identifier = "dev.veloxclient.VeloxClient"
 category = "Game"
 publisher = "VeloxClient"
 copyright = "GPL-3.0 · based on OneClient © 2026 Polyfrost Inc."
-homepage = "https://github.com/VeloxClient"
+homepage = "https://github.com/benhwkoehler-bit/VeloxClient"
 long-description = "Lightweight, performance-focused Minecraft launcher based on OneClient"
 formats = ["nsis", "app", "dmg", "deb", "appimage"]
 binaries = [{ path = "oneclient_app", main = true }]
@@ -156,7 +156,7 @@ Section "-VCRedist"
   ${EndIf}
 
   ${If} $PassiveMode != 1
-    MessageBox MB_OK|MB_ICONEXCLAMATION "This build of OneClient needs the Microsoft Visual C++ Redistributable (x64) 14.40 or newer. Install it from https://aka.ms/vs/17/release/vc_redist.x64.exe, then run this installer again."
+    MessageBox MB_OK|MB_ICONEXCLAMATION "This build of VeloxClient needs the Microsoft Visual C++ Redistributable (x64) 14.40 or newer. Install it from https://aka.ms/vs/17/release/vc_redist.x64.exe, then run this installer again."
   ${EndIf}
 
   vcredist_done:

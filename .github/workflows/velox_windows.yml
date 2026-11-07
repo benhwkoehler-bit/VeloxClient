@@ -1,0 +1,115 @@
+name: VeloxClient Windows (Beta)
+
+# Builds the Windows installer on every push to main (or by hand) and puts it
+# on the rolling "beta" release, where friends can download it without a
+# GitHub account. Unsigned: Windows SmartScreen asks once ("More info" ->
+# "Run anyway").
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - 'distribution/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/velox_windows.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: velox-windows
+  cancel-in-progress: true
+
+# Beta builds skip the release profile's fat LTO: almost the same speed at
+# runtime, a fraction of the link time on the runner.
+env:
+  CARGO_PROFILE_RELEASE_LTO: thin
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS: '16'
+  SQLX_OFFLINE: 'true'
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write # publish the beta release
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Rust
+        uses: ./.github/actions/setup-rust
+        with:
+          save-cache: true
+          restore-cache: true
+          cache-namespace: velox-windows
+
+      - name: Install cargo-packager
+        uses: ./.github/actions/install-cargo-tool
+        with:
+          tool: cargo-packager
+          version: 0.11.8
+
+      - name: Build release binary
+        shell: bash
+        run: cargo build --release --bin oneclient_app
+
+      - name: Stage app-local VC++ runtime
+        shell: bash
+        run: python3 distribution/windows/bundle-crt.py
+
+      - name: Verify staged runtime is Microsoft-signed
+        shell: pwsh
+        run: |
+          $dlls = @(Get-ChildItem 'target/crt/*.dll')
+          if ($dlls.Count -eq 0) { Write-Error 'no CRT DLLs staged'; exit 1 }
+          foreach ($dll in $dlls) {
+            $sig = Get-AuthenticodeSignature $dll.FullName
+            if ($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') {
+              Write-Error "$($dll.Name) is not a valid Microsoft-signed DLL"
+              exit 1
+            }
+          }
+
+      - name: Package installer (unsigned)
+        shell: bash
+        env:
+          CI: 'true'
+        run: cargo packager --release --formats nsis --verbose
+
+      - name: Smoke-test installer layout
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dest = 'C:\velox-smoke'
+          $exe = (Get-ChildItem 'target/release/*-setup.exe')[0].FullName
+          $p = Start-Process -FilePath $exe -ArgumentList '/S', "/D=$dest" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { Write-Error "installer exited $($p.ExitCode)"; exit 1 }
+          if (-not (Test-Path "$dest\oneclient_app.exe")) { Write-Error 'app missing after install'; exit 1 }
+
+      - name: Collect files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp target/release/*-setup.exe dist/VeloxClient-beta-windows-setup.exe
+          ls -la dist
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          path: dist/VeloxClient-beta-windows-setup.exe
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish rolling beta release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release delete beta --cleanup-tag --yes || true
+          gh release create beta dist/VeloxClient-beta-windows-setup.exe \
+            --prerelease \
+            --target "$GITHUB_SHA" \
+            --title "VeloxClient Beta (Windows)" \
+            --notes "Beta build from ${GITHUB_SHA::7}. Unsigned: if Windows SmartScreen appears, click \"More info\" and then \"Run anyway\"."
