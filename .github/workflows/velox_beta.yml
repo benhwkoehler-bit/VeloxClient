@@ -138,20 +138,36 @@ jobs:
         shell: bash
         run: cargo build --release --bin oneclient_app --target ${{ matrix.target }}
 
-      - name: Package disk image (unsigned)
+      - name: Package app bundle
         shell: bash
         env:
           CI: 'true'
-        run: cargo packager --release --formats app,dmg --target ${{ matrix.target }} --verbose
+        run: cargo packager --release --formats app --target ${{ matrix.target }} --verbose
 
-      - name: Collect disk image
+      # Only the binary comes out linker-signed; an unsealed bundle makes
+      # macOS call the download "damaged" with no way to open it. An ad-hoc
+      # signature over the whole bundle turns that into the usual
+      # "unidentified developer" prompt that right-click > Open gets past.
+      - name: Ad-hoc sign the whole app bundle
         shell: bash
         run: |
           set -euo pipefail
+          app="$(ls -d target/${{ matrix.target }}/release/*.app | head -n1)"
+          test -n "$app" || { echo "::error::no .app produced"; exit 1; }
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          echo "APP_PATH=$app" >> "$GITHUB_ENV"
+
+      - name: Build disk image
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging="$(mktemp -d)"
+          cp -R "$APP_PATH" "$staging/"
+          ln -s /Applications "$staging/Applications"
           mkdir -p dist
-          dmg="$(ls target/${{ matrix.target }}/release/*.dmg | head -n1)"
-          test -n "$dmg" || { echo "::error::no dmg produced"; exit 1; }
-          cp "$dmg" "dist/VeloxClient-beta-macos-${{ matrix.label }}.dmg"
+          hdiutil create -volname "VeloxClient" -srcfolder "$staging" -ov -format UDZO \
+            "dist/VeloxClient-beta-macos-${{ matrix.label }}.dmg"
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
