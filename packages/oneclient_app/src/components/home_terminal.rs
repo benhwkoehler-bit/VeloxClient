@@ -23,6 +23,19 @@ const FACT_SIZE: f32 = 13.;
 const STATUS_SIZE: f32 = 11.;
 const STATUS_HEIGHT: f32 = 26.;
 
+/// Lines the Velox Companion mod writes into the game log
+const FPS_MARKER: &str = "velox:fps=";
+const STARTUP_MARKER: &str = "velox:startup_ms=";
+
+/// The newest number after `marker` in the game log, read from the end
+fn latest_metric(lines: &[std::sync::Arc<str>], marker: &str) -> Option<u64> {
+    lines.iter().rev().find_map(|line| {
+        let (_, rest) = line.split_once(marker)?;
+        let digits: String = rest.chars().take_while(char::is_ascii_digit).collect();
+        digits.parse().ok()
+    })
+}
+
 /// `~/versions/26.3` above the title
 pub fn cluster_path(cluster: &Cluster) -> impl IntoElement {
     paragraph()
@@ -148,7 +161,11 @@ pub struct HomeStatusLine {
 impl Component for HomeStatusLine {
     fn render(&self) -> impl IntoElement {
         let (renderer, mods) = use_cluster_summary(self.cluster.id);
-        let running = matches!(use_game_snapshot().stage(self.cluster.id), Some(LaunchStage::Running));
+        let game = use_game_snapshot();
+        let running = matches!(game.stage(self.cluster.id), Some(LaunchStage::Running));
+        let logs = game.logs_for(self.cluster.id);
+        let fps = running.then(|| latest_metric(&logs, FPS_MARKER)).flatten();
+        let startup_ms = latest_metric(&logs, STARTUP_MARKER);
 
         let (state_text, state_color) = if running {
             (t("oneclient.home.status.running"), colors::brand())
@@ -181,7 +198,22 @@ impl Component for HomeStatusLine {
                     .span(
                         Span::new(format!("{mods} {}", t("oneclient.home.facts.mods")))
                             .color(colors::on_art_secondary()),
-                    ),
+                    )
+                    .maybe(fps.is_some(), |p| {
+                        p.span(separator()).span(
+                            Span::new(format!("{} fps", fps.unwrap_or_default()))
+                                .color(colors::brand()),
+                        )
+                    })
+                    .maybe(startup_ms.is_some(), |p| {
+                        p.span(separator()).span(
+                            Span::new(format!(
+                                "start {:.1} s",
+                                startup_ms.unwrap_or_default() as f64 / 1000.
+                            ))
+                            .color(colors::on_art_secondary()),
+                        )
+                    }),
             )
     }
 }
@@ -195,6 +227,19 @@ mod tests {
         assert_eq!(Renderer::PureMetal.label(), "pure metal ●");
         assert_eq!(Renderer::Sodium.label(), "sodium");
         assert_eq!(Renderer::Standard.label(), "standard");
+    }
+
+    #[test]
+    fn the_newest_companion_metric_wins() {
+        let lines: Vec<std::sync::Arc<str>> = vec![
+            "[15:37:45] [Render thread/INFO]: velox:startup_ms=15873".into(),
+            "[15:37:49] [Render thread/INFO]: velox:fps=59".into(),
+            "[15:37:54] [Render thread/INFO]: something else".into(),
+            "[15:37:54] [Render thread/INFO]: velox:fps=214".into(),
+        ];
+        assert_eq!(latest_metric(&lines, FPS_MARKER), Some(214));
+        assert_eq!(latest_metric(&lines, STARTUP_MARKER), Some(15873));
+        assert_eq!(latest_metric(&[], FPS_MARKER), None);
     }
 
     #[test]

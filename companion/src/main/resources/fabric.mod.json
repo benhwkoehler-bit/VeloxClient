@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "velox-companion",
+	"version": "${version}",
+	"name": "Velox Companion",
+	"description": "Tells the VeloxClient launcher how the game runs: live FPS and startup time.",
+	"authors": ["benhwkoehler-bit"],
+	"contact": {
+		"homepage": "https://github.com/benhwkoehler-bit/VeloxClient",
+		"sources": "https://github.com/benhwkoehler-bit/VeloxClient"
+	},
+	"license": "GPL-3.0-only",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["dev.veloxclient.companion.VeloxCompanion"]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": ">=26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
