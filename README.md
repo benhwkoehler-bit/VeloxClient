@@ -1,93 +1,46 @@
-<div align="center">
+# VeloxClient
 
-<img src=".github/media/RepoBanner.png" alt="Repository Banner" />
+Ein schneller, schlanker Minecraft-Launcher mit eigenem Performance-Pack.
+Basiert auf [OneClient](https://github.com/Polyfrost/OneLauncher) von Polyfrost.
 
-# OneClient  |  OneLauncher
-The monorepo containing the code for OneLauncher, OneClient, and their core backend.
+> **Beta:** VeloxClient ist gerade in der Testphase für Freunde.
 
-OneClient is a Minecraft client featuring fully 100% open-source components, offering many packaged and pre-configured mods in one click.
+## Download
 
-</div>
+**Windows:** [VeloxClient Beta herunterladen](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
+(`VeloxClient-beta-windows-setup.exe`)
 
-## Installing
+Der Installer ist noch nicht signiert. Wenn Windows „Der Computer wurde durch Windows geschützt“
+anzeigt: **Weitere Informationen → Trotzdem ausführen**.
 
-You can install the latest release of OneClient from our website: [https://polyfrost.org/projects/oneclient](https://polyfrost.org/projects/oneclient)
-as well as our [GitHub releases](https://github.com/Polyfrost/OneLauncher/releases/latest).
+## Was VeloxClient kann
 
-| Windows (x86_64) | macOS (Intel & Apple Silicon) | Linux (x86_64)                                          |
-|------------------|-------------------------------|---------------------------------------------------------|
-| Installer 🔄      | DMG 🔄                        | AppImage 🔄                                             |
-|                  | App Bundle 🔄                 | DEB                                                     |
-|                  |                               | RPM                                                     |
-|                  |                               | *[RPM (COPR)](https://copr.fedorainfracloud.org/coprs/polyfrost/OneClient/) 🔄 |
-|                  |                               | [AUR](https://aur.archlinux.org/packages/oneclient-bin) |
+- **Velox Performance-Pack** für Minecraft 26.2 und 26.3 – eigene Packs für Windows und macOS,
+  Sodium, Lithium, FerriteCore und vieles mehr sind schon drin
+- **Wählbare Extras** beim ersten Start: Minimap, Weltkarte, AppleSkin, Chat Heads und mehr
+- **Pure Metal** auf Macs mit Apple Silicon (26.3): Minecraft läuft über Apples Metal, zusammen mit Sodium
+- **Profile übernehmen** aus Prism, MultiMC, Modrinth App, NoRisk und Lunar – die Originale bleiben unverändert
+- Ältere Versionen (1.8.9, 1.21.x, 26.1.2) laufen ohne Velox-Mods
+- Lila Design mit Pixel-Schrift (Monocraft) und Terminal-Look
 
-> 🔄 = Has support for autoupdating built-in
+## Selbst bauen
 
-<details>
-
-<summary><h3>COPR Installation</h3></summary>
-
-On supported distributions (RHEL, Fedora, Bazzite etc.), you can make use of the Fedora COPR instead of using the AppImage or manually installing the RPM file.
-1. First you have to enable the repository:
-```
-sudo dnf copr enable polyfrost/OneClient
-```
-2. Then you can install the package:
-```
-sudo dnf install oneclient-bin
-```
-
-</details>
-
-## Contributing
-
-We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) before getting started.
-
-
-### Requirements
-
-The project targets **Rust 1.97** or later. You can install Rust via [rustup](https://rustup.rs/).
-
-
-### Building & Running
+Benötigt [Rust](https://rustup.rs/) 1.97 oder neuer.
 
 ```sh
-# Run the app
+# App starten
 cargo run -p oneclient_app
 
-# Build a release binary
+# Release-Build
 cargo build -p oneclient_app --release
 ```
 
+Installer werden mit [cargo-packager](https://github.com/crabnebula-dev/cargo-packager) gebaut
+(Windows: `nsis`, macOS: `app,dmg`). Der Windows-Installer entsteht automatisch über
+GitHub Actions bei jedem Push auf `main`.
 
-### Packaging / Releasing
+## Lizenz
 
-Installers are produced with [**cargo-packager**](https://github.com/crabnebula-dev/cargo-packager)
-(the standalone bundler spun out of the Tauri bundler). Config lives in
-[`packages/oneclient_app/Cargo.toml`](./packages/oneclient_app/Cargo.toml) under
-`[package.metadata.packager]`.
-
-```sh
-cargo install cargo-packager --locked
-
-# Build the binary, then bundle it for the current OS:
-cargo build --release -p oneclient_app
-cargo packager --release -p oneclient_app --formats <targets>
-#   Windows: nsis      macOS: app,dmg      Linux: deb,appimage
-```
-
-
-### Versioning
-
-The workspace shares a single version, defined in the root [`Cargo.toml`](./Cargo.toml) under `[workspace.package]`.
-
-Versions and release notes come from [Knope](https://knope.tech) change files in [`.changeset/`](./.changeset).
-Add one per user-facing change with `knope document-change` (installed via `cargo install knope`). The
-`OneClient Release Build` workflow consumes them, bumps the version, writes [`CHANGELOG.md`](./CHANGELOG.md),
-and uses the new entry as the GitHub release body, which is what the launcher's changelog page shows.
-
-
-## Code signing
-
-This program uses free code signing provided by [SignPath.io](https://signpath.io?utm_source=foundation&utm_medium=github&utm_campaign=0install), and a certificate by the [SignPath Foundation](https://signpath.org?utm_source=foundation&utm_medium=github&utm_campaign=0install). We thank them very much to their contributions to OSS software!
+VeloxClient steht wie OneClient unter der [GPL-3.0](./LICENSE).
+Based on OneClient by Polyfrost – siehe auch [ATTRIBUTION.md](./ATTRIBUTION.md).
+Minecraft ist eine Marke von Mojang Studios. VeloxClient ist kein offizielles Minecraft-Produkt.
