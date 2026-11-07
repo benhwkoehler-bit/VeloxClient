@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
  * Reports how the game runs to the VeloxClient launcher. The launcher already
  * reads the game log live, so the reports are plain log lines with a fixed
  * prefix: {@code velox:fps=214} every few seconds and {@code velox:startup_ms=…}
- * once the title screen first appears.
+ * once the title screen first appears. On the very first start it also shows
+ * the {@link WelcomeScreen}.
  */
 public final class VeloxCompanion implements ClientModInitializer {
 	private static final Logger LOG = LoggerFactory.getLogger("VeloxCompanion");
@@ -29,10 +30,17 @@ public final class VeloxCompanion implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
 		ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
-			if (!startupReported && screen instanceof TitleScreen) {
+			if (!(screen instanceof TitleScreen)) {
+				return;
+			}
+			if (!startupReported) {
 				startupReported = true;
 				long startupMs = System.currentTimeMillis() - ManagementFactory.getRuntimeMXBean().getStartTime();
 				LOG.info("velox:startup_ms={}", startupMs);
+			}
+			if (!WelcomeState.seen()) {
+				// Switch on the next frame, not while the title screen is still initialising
+				client.execute(() -> client.setScreenAndShow(new WelcomeScreen(screen)));
 			}
 		});
 	}
