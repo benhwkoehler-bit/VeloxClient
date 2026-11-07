@@ -170,6 +170,11 @@ pub enum CrashModAction {
     Enable {
         hash: String,
     },
+    /// VeloxClient: switch off the mod that asked for a version or a mod that
+    /// cannot be had, so the game starts without it
+    Disable {
+        hash: String,
+    },
     Install {
         mod_id: String,
         range: Option<VersionRange>,

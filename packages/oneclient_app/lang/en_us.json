@@ -1233,6 +1233,8 @@
   "oneclient.components.crash_dialog.game_folder_fallback": "your game folder",
   "oneclient.components.crash_dialog.mods.enable": "Enable",
   "oneclient.components.crash_dialog.mods.enabled": "Enabled",
+  "oneclient.components.crash_dialog.mods.disable": "Disable",
+  "oneclient.components.crash_dialog.mods.disabled": "Disabled",
   "oneclient.components.crash_dialog.mods.installed": "Installed",
   "oneclient.components.crash_dialog.mods.installing": "Installing",
   "oneclient.components.crash_dialog.mods.more": "And %s more",

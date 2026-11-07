@@ -462,7 +462,13 @@ pub(crate) fn attach_jar(issues: &mut [CrashModIssue], jar: &InstalledJar) {
         }
 
         for source in &mut issue.sources {
-            fill(source);
+            // VeloxClient: a mod that wants a version (or a mod) the pack
+            // cannot give can be switched off with one click
+            if fill(source) == Some(true) && issue.kind != CrashModIssueKind::Missing {
+                source.action = Some(CrashModAction::Disable {
+                    hash: jar.hash.clone(),
+                });
+            }
         }
     }
 }
@@ -1752,6 +1758,32 @@ mod tests {
         assert_eq!(
             issues[0].target.note,
             "Inside Roughly Enough Items, disabled"
+        );
+    }
+
+    #[test]
+    fn a_mod_wanting_a_newer_dependency_can_be_switched_off() {
+        // VeloxClient's real crash: Not Enough FPS wanted Sodium 0.9.3, the pack had 0.9.2
+        let line = " - Mod 'Not Enough FPS' (not-enough-fps) 26.3-1.1.2 requires version 0.9.3- or later of mod 'Sodium' (sodium), but only the wrong version is present: 0.9.2+mc26.3!";
+        let mut issues = problem_issues(&problems_in(line));
+        assert!(!issues.is_empty(), "the loader line should parse into an issue");
+        assert_ne!(issues[0].kind, CrashModIssueKind::Missing);
+
+        attach_jar(
+            &mut issues,
+            &jar("nef-hash", true, "Not Enough FPS", "not-enough-fps", "26.3-1.1.2"),
+        );
+
+        let source = issues[0]
+            .sources
+            .iter()
+            .find(|row| row.hash.as_deref() == Some("nef-hash"))
+            .expect("the requiring mod is matched to its jar");
+        assert_eq!(
+            source.action,
+            Some(CrashModAction::Disable {
+                hash: "nef-hash".to_string()
+            })
         );
     }
 

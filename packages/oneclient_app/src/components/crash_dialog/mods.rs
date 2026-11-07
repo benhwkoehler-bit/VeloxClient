@@ -131,12 +131,20 @@ impl Component for CrashModRows {
                     .any(|info| &info.hash == hash && info.enabled),
                 _ => false,
             };
+            let disabled_since = match &line.row.action {
+                Some(CrashModAction::Disable { hash }) => installed
+                    .iter()
+                    .any(|info| &info.hash == hash && !info.enabled),
+                _ => false,
+            };
 
             CrashModRow {
                 cluster_id: self.cluster_id,
                 name: name.unwrap_or_else(|| line.row.name.clone()),
                 version: line.row.version.clone(),
-                note: if enabled_since {
+                note: if disabled_since {
+                    t("oneclient.components.crash_dialog.mods.disabled").to_string()
+                } else if enabled_since {
                     t("oneclient.components.crash_dialog.mods.enabled").to_string()
                 } else {
                     line.row.note.clone()
@@ -144,8 +152,12 @@ impl Component for CrashModRows {
                 icon_url,
                 installed: line.row.hash.is_some(),
                 nested: line.nested,
-                resolved: enabled_since,
-                action: line.row.action.clone().filter(|_| !enabled_since),
+                resolved: enabled_since || disabled_since,
+                action: line
+                    .row
+                    .action
+                    .clone()
+                    .filter(|_| !enabled_since && !disabled_since),
                 installed_projects: installed_projects.clone(),
             }
             .into_element()
@@ -255,6 +267,18 @@ impl Component for CrashModRow {
                     });
                 })
                 .text(t("oneclient.components.crash_dialog.mods.enable"))
+                .into_element(),
+            CrashModAction::Disable { hash } => Button::new()
+                .secondary()
+                .small()
+                .on_press(move |_| {
+                    cluster.mutate(ClusterAction::SetArtifactEnabled {
+                        cluster_id,
+                        hash: hash.clone(),
+                        enabled: false,
+                    });
+                })
+                .text(t("oneclient.components.crash_dialog.mods.disable"))
                 .into_element(),
             CrashModAction::Install { mod_id, range } => {
                 let name = self.name.clone();
