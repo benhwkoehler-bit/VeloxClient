@@ -24,7 +24,7 @@ const TRAVEL: f32 = 320.;
 const TTL_MS: f32 = crate::notifications::MESSAGE_TOAST_TTL.as_millis() as f32;
 const TTL_STEP: std::time::Duration = std::time::Duration::from_millis(100);
 /// Below the navbar a smaller offset let the startup progress toast cover the nav links
-const TOP_PX: f32 = crate::theme::NAVBAR_HEIGHT_PX + 12.;
+const TOP_PX: f32 = crate::theme::TOPBAR_HEIGHT_PX + 12.;
 
 #[derive(Clone, Copy, PartialEq)]
 enum Variant {

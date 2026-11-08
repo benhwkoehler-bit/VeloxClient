@@ -31,7 +31,6 @@ fn separator(item_width: Option<f32>) -> Rect {
 pub struct ContextMenu {
     x: f32,
     y: f32,
-    upwards: bool,
     title: Option<String>,
     entries: Vec<Entry>,
     on_close: EventHandler<()>,
@@ -43,7 +42,6 @@ impl ContextMenu {
         Self {
             x,
             y,
-            upwards: false,
             title: None,
             entries: Vec::new(),
             on_close: (|()| {}).into(),
@@ -53,11 +51,6 @@ impl ContextMenu {
 
     pub fn title(mut self, title: impl Into<String>) -> Self {
         self.title = Some(title.into());
-        self
-    }
-
-    pub fn open_upwards(mut self) -> Self {
-        self.upwards = true;
         self
     }
 
@@ -176,12 +169,7 @@ impl Component for ContextMenu {
         let menu_height = measured.height + PANEL_INSET;
 
         let (x, y) = if placed {
-            let top = if self.upwards && self.y - menu_height >= 0. {
-                self.y - menu_height
-            } else {
-                self.y
-            };
-            clamp_to_window(self.x, top, menu_width, menu_height)
+            clamp_to_window(self.x, self.y, menu_width, menu_height)
         } else {
             (self.x, self.y)
         };

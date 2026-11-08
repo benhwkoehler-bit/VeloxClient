@@ -157,6 +157,10 @@ image = {version = "=0.25.10", default-features = false, features = ["png", "jpe
 # Proc macros are dylibs rustc loads during the build, and stripping them with
 # packed debuginfo produces a LINKEDIT section that macOS 27's dyld refuses to
 # open. Build dependencies keep their symbols; the shipped binary is unaffected.
+# Line tables keep backtraces readable while target/ stays a fraction of the size
+[profile.dev]
+debug = "line-tables-only"
+
 # Screenshot thumbnails and gallery tiles decode in these, too slow unoptimized
 [profile.dev.package.image]
 opt-level = 3

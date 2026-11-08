@@ -15,6 +15,9 @@ pub mod colors;
 
 pub const NAVBAR_HEIGHT_PX: f32 = 80.;
 pub const HOME_PADDING_PX: f32 = 48.;
+/// VeloxClient app shell: slim top bar beside a left icon rail
+pub const TOPBAR_HEIGHT_PX: f32 = 64.;
+pub const RAIL_WIDTH_PX: f32 = 84.;
 pub const DEFAULT_FONT: &str = "Poppins";
 pub const MONO_FONT: &str = "JetBrains Mono";
 /// Pixel font for Velox themes: Monocraft (© 2022 Idrees Hassan, SIL OFL 1.1).

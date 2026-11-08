@@ -7,17 +7,6 @@ use crate::i18n::{t, tf};
 use crate::theme;
 use crate::theme::{rounded, text_size};
 
-pub fn border_all(width: f32) -> Border {
-    Border::new()
-        .fill(theme::colors::component_border())
-        .width(BorderWidth {
-            top: width,
-            right: width,
-            bottom: width,
-            left: width,
-        })
-}
-
 pub fn border_all_color(width: f32, color: Color) -> Border {
     Border::new().fill(color).width(BorderWidth {
         top: width,

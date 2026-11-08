@@ -8,6 +8,9 @@ use crate::hooks::use_overlay_claims;
 use crate::theme;
 use crate::ui::entrance_motion_layer;
 
+const PAGE_FADE_MS: u64 = 340;
+const PAGE_SLIDE_PX: f32 = 26.;
+
 #[derive(Clone, Copy, PartialEq)]
 enum Enter {
     None,
@@ -98,6 +101,23 @@ fn enter_kind(from: &Route, to: &Route) -> Enter {
     }
 }
 
+/// Position of a page in the rail, top to bottom; anything else sits below them all
+fn rail_rank(route: &Route) -> u8 {
+    match route {
+        Route::Home {} => 0,
+        Route::Clusters {} => 1,
+        Route::Browser { .. } | Route::BrowserPackage { .. } => 2,
+        Route::Wardrobe {} => 3,
+        Route::Stats {} => 4,
+        _ => 5,
+    }
+}
+
+/// Moving down the rail brings the page up from below, moving up brings it from above
+fn slide_sign(from: &Route, to: &Route) -> f32 {
+    if rail_rank(to) < rail_rank(from) { -1. } else { 1. }
+}
+
 #[derive(PartialEq)]
 pub struct AnimatedAppOutlet;
 
@@ -175,7 +195,7 @@ impl Component for AnimatedAppOutlet {
 
         let anim = use_animation(|_conf| {
             AnimNum::new(0., 1.)
-                .time(430)
+                .time(PAGE_FADE_MS)
                 .ease(Ease::Out)
                 .function(Function::Cubic)
         });
@@ -205,9 +225,9 @@ impl Component for AnimatedAppOutlet {
             router.write().settle();
         }
 
-        let kind = match &*router.read() {
-            AnimatedRouterContext::FromTo(from, to) => enter_kind(from, to),
-            AnimatedRouterContext::In(_) => Enter::None,
+        let (kind, slide_direction) = match &*router.read() {
+            AnimatedRouterContext::FromTo(from, to) => (enter_kind(from, to), slide_sign(from, to)),
+            AnimatedRouterContext::In(_) => (Enter::None, 1.),
         };
 
         let is_home = matches!(to, Route::Home {});
@@ -221,17 +241,20 @@ impl Component for AnimatedAppOutlet {
 
         let chrome_opacity = if kind == Enter::Up { p } else { 1.0 };
 
-        let (content_dy, content_opacity) = if anim_finished || matches!(kind, Enter::None) {
+        let (content_dy, content_opacity) = if anim_finished || kind == Enter::None {
             (0., 1.)
         } else {
-            match kind {
-                Enter::None => (0., 1.),
-                Enter::Up => ((1. - p) * 48., p),
-                Enter::Fade => ((1. - p) * 22., p),
-            }
+            ((1. - p) * PAGE_SLIDE_PX * slide_direction, p)
         };
 
-        let overlay = show_overlay.then(|| appshell_overlay(chrome_opacity));
+        // Returning home dissolves the page backdrop so the art fades in instead of popping
+        let overlay = if show_overlay {
+            Some(appshell_overlay(chrome_opacity))
+        } else if kind == Enter::Fade && !anim_finished {
+            Some(appshell_overlay(1. - p))
+        } else {
+            None
+        };
 
         let back = (!is_home).then(|| {
             rect()
@@ -243,7 +266,7 @@ impl Component for AnimatedAppOutlet {
             .vertical()
             .width(Size::fill())
             .height(Size::fill())
-            .margin(Gaps::new(theme::NAVBAR_HEIGHT_PX, 0., 0., 0.))
+            .margin(Gaps::new(theme::TOPBAR_HEIGHT_PX, 0., 0., theme::RAIL_WIDTH_PX))
             .overflow(Overflow::Clip)
             .layer(Layer::Relative(3))
             .maybe_child(back)
@@ -266,7 +289,9 @@ impl Component for AnimatedAppOutlet {
             .overflow(Overflow::Clip)
             .on_global_key_down(on_global_key)
             .on_global_pointer_up(on_global_pointer)
-            .maybe_child(overlay)
+            // Keeps the column's child index stable: if it shifted when the overlay
+            // goes away, the page would be rebuilt and replay its entrance
+            .child(overlay.unwrap_or_else(rect))
             .child(column)
     }
 }
@@ -274,6 +299,16 @@ impl Component for AnimatedAppOutlet {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn moving_down_the_rail_slides_up_from_below() {
+        assert_eq!(slide_sign(&Route::Home {}, &Route::Clusters {}), 1.);
+    }
+
+    #[test]
+    fn moving_up_the_rail_slides_down_from_above() {
+        assert_eq!(slide_sign(&Route::Clusters {}, &Route::Home {}), -1.);
+    }
 
     #[test]
     fn escape_action_per_route() {

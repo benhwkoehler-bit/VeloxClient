@@ -1,5 +1,6 @@
 mod app_navbar;
 mod onboarding_navbar;
+mod side_rail;
 
 pub use app_navbar::Navbar as AppNavbar;
 pub use onboarding_navbar::OnboardingNavbar;
