@@ -285,12 +285,12 @@ impl Component for EnableButton {
                         .padding(Gaps::new_symmetric(0., 11.))
                         .child(if running {
                             crate::components::Spinner::new(12.)
-                                .color(colors::fg_primary())
+                                .color(colors::on_brand())
                                 .into_element()
                         } else {
                             Icon::new(IconType::CheckCircle)
                                 .size(12.)
-                                .color(colors::fg_primary())
+                                .color(colors::on_brand())
                                 .into_element()
                         })
                         .child(
@@ -303,7 +303,7 @@ impl Component for EnableButton {
                                 .font_size(text_size(11.))
                                 .font_weight(FontWeight::SEMI_BOLD)
                                 .max_lines(1)
-                                .color(colors::fg_primary()),
+                                .color(colors::on_brand()),
                         ),
                 )
                 .into_element(),
@@ -435,7 +435,7 @@ fn thumbnail_placeholder(size: f32, radius: f32, icon_ratio: f32) -> Element {
         .width(Size::px(size))
         .height(Size::px(size))
         .corner_radius(rounded(radius))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             Icon::new(IconType::DotsGrid)
                 .size(size * icon_ratio)
@@ -494,7 +494,7 @@ impl Component for PackageBanner {
             .height(Size::px(h))
             .center()
             .overflow(Overflow::Clip)
-            .background(colors::page_elevated());
+            .background(crate::theme::glass::glass_over(colors::page_elevated()));
 
         let icon_placeholder = thumbnail_placeholder(icon, 10., 0.45);
         let backdrop_only = self.backdrop_only;

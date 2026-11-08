@@ -85,7 +85,7 @@ impl Component for CrashDialog {
                             .max_height(Size::window_percent(92.))
                             .content(Content::Flex)
                             .overflow(Overflow::Clip)
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .corner_radius(rounded(16.))
                             .padding(Gaps::new_all(DIALOG_PADDING))
                             .spacing(DIALOG_SPACING)
@@ -289,7 +289,7 @@ fn card() -> Rect {
         .width(Size::fill())
         .padding(Gaps::new_all(CARD_PADDING))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(crate::ui::border_all_color(1., colors::component_border()))
 }
 

@@ -255,7 +255,7 @@ fn toast_shell(entry: &InboxEntry) -> Rect {
     };
     rect()
         .width(Size::px(TOAST_W))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .corner_radius(rounded(12.))
         .overflow(Overflow::Clip)
         .border(

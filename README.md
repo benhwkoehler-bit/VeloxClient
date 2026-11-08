@@ -5,6 +5,8 @@ Based on [OneClient](https://github.com/Polyfrost/OneLauncher) by Polyfrost.
 
 > **Beta:** VeloxClient is currently in beta.
 
+> **New look:** VeloxClient is now black and white. The purple design is gone, and the logo and app icon are black and white too.
+
 ## Download
 
 [Download VeloxClient Beta](https://github.com/benhwkoehler-bit/VeloxClient/releases/tag/beta)
@@ -30,7 +32,7 @@ The builds are not signed yet:
 - **Pure Metal** on Apple Silicon Macs (26.3): Minecraft renders through Apple's Metal, alongside Sodium
 - **Import your profiles** from Prism, MultiMC, Modrinth App, NoRisk and Lunar. The originals stay untouched
 - Older versions (1.8.9, 1.21.x, 26.1.2) run without Velox mods
-- Purple design with a pixel font (Monocraft) and a terminal look
+- Black and white design with liquid glass, a pixel font (Monocraft) and a terminal look
 
 ## Building
 

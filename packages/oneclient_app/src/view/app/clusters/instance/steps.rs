@@ -530,7 +530,7 @@ fn loader_version_card(mut wizard: Wizard, picks: &Picks, chosen: LoaderChoice) 
         .spacing(16.)
         .padding(Gaps::new_all(16.))
         .corner_radius(rounded(CARD_RADIUS))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             rect()

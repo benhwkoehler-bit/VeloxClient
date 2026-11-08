@@ -217,7 +217,7 @@ fn alternative_row(
         .spacing(10.)
         .padding(Gaps::new_symmetric(0., 8.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(icon)
         .child(
@@ -264,7 +264,7 @@ pub(crate) fn explanation_panel(markdown: String) -> impl IntoElement {
         .width(Size::fill())
         .padding(Gaps::new_all(12.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             Markdown::new(markdown)

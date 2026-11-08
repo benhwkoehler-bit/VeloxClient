@@ -141,7 +141,7 @@ impl Component for JavaInstallManager {
                             .spacing(16.)
                             .padding(Gaps::new_all(20.))
                             .corner_radius(rounded(16.))
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .border(border_all_color(1., colors::component_border()))
                             .child(
                                 label()
@@ -249,7 +249,7 @@ impl Component for VersionRow {
                             .text(t("oneclient.components.java_install_manager.suggested"))
                             .font_size(text_size(10.))
                             .font_weight(FontWeight::SEMI_BOLD)
-                            .color(colors::fg_primary()),
+                            .color(colors::on_brand()),
                     ),
             );
         }
@@ -282,7 +282,7 @@ impl Component for VersionRow {
             .spacing(12.)
             .padding(Gaps::new_symmetric(10., 12.))
             .corner_radius(rounded(10.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .maybe(self.suggested, |el| {
                 el.border(border_all_color(1., colors::brand()))
             })

@@ -24,16 +24,16 @@ const DEFAULT_HEIGHT: f32 = 150.;
 const Y_AXIS_WIDTH: f32 = 44.;
 
 pub const SLICE_COLORS: [Color; 10] = [
-    Color::from_rgb(43, 75, 255),
-    Color::from_rgb(27, 217, 106),
-    Color::from_rgb(241, 100, 54),
-    Color::from_rgb(198, 120, 221),
-    Color::from_rgb(97, 175, 239),
-    Color::from_rgb(229, 192, 123),
-    Color::from_rgb(35, 154, 96),
-    Color::from_rgb(224, 108, 117),
-    Color::from_rgb(120, 129, 141),
-    Color::from_rgb(152, 195, 121),
+    Color::from_rgb(255, 255, 255),
+    Color::from_rgb(190, 190, 190),
+    Color::from_rgb(130, 130, 130),
+    Color::from_rgb(225, 225, 225),
+    Color::from_rgb(95, 95, 95),
+    Color::from_rgb(160, 160, 160),
+    Color::from_rgb(70, 70, 70),
+    Color::from_rgb(205, 205, 205),
+    Color::from_rgb(115, 115, 115),
+    Color::from_rgb(45, 45, 45),
 ];
 
 pub fn slice_color(i: usize) -> Color {
@@ -548,7 +548,7 @@ fn readout(name: String, value: String) -> Element {
                 .spacing(6.)
                 .padding(Gaps::new_symmetric(3., 8.))
                 .corner_radius(rounded(6.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(crate::ui::border_all_color(1., colors::component_border()))
                 .child(
                     rect()

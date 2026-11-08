@@ -73,7 +73,7 @@ pub(super) fn toolbar_panel(leading: Option<Element>, controls: Vec<Element>) ->
         .overflow(Overflow::Clip)
         .padding(Gaps::new_symmetric(8., 12.))
         .corner_radius(top_corners)
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             rect()
                 .horizontal()
@@ -171,7 +171,7 @@ pub(super) fn content_box(
         .height(Size::flex(1.0))
         .padding(Gaps::new(0., 12., 12., 12.))
         .corner_radius(bottom_corners)
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .overflow(Overflow::Clip)
         .content(Content::Flex)
         .children(notices.into_iter().map(notice_bar))
@@ -405,7 +405,7 @@ pub(super) fn card_icon(icon: &CardIcon, size: f32) -> Element {
             .height(Size::px(size))
             .corner_radius(rounded(8.))
             .overflow(Overflow::Clip)
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .child(LocalImage::new(path.clone(), IMAGE_EDGE, true).skeleton(true))
             .into_element(),
         CardIcon::Cached(url, fallback) => CachedIcon {

@@ -199,7 +199,7 @@ pub fn fg_strong() -> Color {
 }
 
 pub fn on_media() -> Color {
-    Color::from_rgb(213, 219, 255)
+    Color::from_rgb(240, 240, 240)
 }
 
 pub fn is_light() -> bool {
@@ -226,9 +226,9 @@ pub fn shade() -> Color {
     if is_light() { page() } else { Color::BLACK }
 }
 
-const ON_LIGHT_BG: Rgb = (22, 30, 54);
-const ON_DARK_BG: Rgb = (213, 219, 255);
-const ON_DARK_BG_DISABLED: Rgb = (205, 209, 235);
+const ON_LIGHT_BG: Rgb = (10, 10, 10);
+const ON_DARK_BG: Rgb = (240, 240, 240);
+const ON_DARK_BG_DISABLED: Rgb = (200, 200, 200);
 
 const MIN_LIGHT_TEXT_CONTRAST: f32 = 3.;
 
@@ -408,33 +408,33 @@ fn code(dark: Rgb, light: Rgb) -> Color {
 }
 
 pub fn code_info() -> Color {
-    code((97, 175, 239), (30, 100, 200))
+    code((170, 170, 170), (110, 110, 110))
 }
 
 pub fn code_warn() -> Color {
-    code((229, 192, 123), (150, 95, 0))
+    code((181, 181, 181), (82, 82, 82))
 }
 
 pub fn code_error() -> Color {
-    code((224, 108, 117), (200, 45, 55))
+    code((150, 150, 150), (100, 100, 100))
 }
 
 pub fn code_debug() -> Color {
-    code((152, 195, 121), (55, 125, 45))
+    code((156, 156, 156), (75, 75, 75))
 }
 
 pub fn code_chat() -> Color {
-    code((198, 120, 221), (150, 50, 170))
+    code((180, 180, 180), (123, 123, 123))
 }
 
 pub fn code_muted() -> Color {
-    code((120, 128, 140), (95, 104, 118))
+    code((129, 129, 129), (106, 106, 106))
 }
 
 pub fn selection_bg() -> Color {
-    Color::from_rgb(97, 175, 239).with_a(60)
+    Color::from_rgb(170, 170, 170).with_a(60)
 }
 
 pub fn toast_action() -> Color {
-    Color::from_rgb(155, 161, 166)
+    Color::from_rgb(160, 160, 160)
 }

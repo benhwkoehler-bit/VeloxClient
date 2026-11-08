@@ -12,6 +12,7 @@ use crate::AppAssets;
 use colors::Palette;
 
 pub mod colors;
+pub mod glass;
 
 pub const NAVBAR_HEIGHT_PX: f32 = 80.;
 pub const HOME_PADDING_PX: f32 = 48.;
@@ -229,6 +230,10 @@ pub fn set_scale_factor(scale: f32) {
     SCALE_FACTOR.set(scale);
 }
 
+pub fn scale_factor() -> f32 {
+    SCALE_FACTOR.get()
+}
+
 pub fn text_size(size: f32) -> f32 {
     if !colors::active_theme()
         .pixel_font_size
@@ -281,7 +286,12 @@ pub fn wordmark(width: f32, height: f32, color: Color) -> Element {
 }
 
 pub fn rounded_px(radius: f32) -> f32 {
-    radius * colors::active_theme().radius_scale
+    glass::capped_radius(radius) * colors::active_theme().radius_scale
+}
+
+/// For circles and pills, which the glass look's corner cap must not square off
+pub fn rounded_full(radius: f32) -> CornerRadius {
+    CornerRadius::new_all(radius * colors::active_theme().radius_scale)
 }
 
 pub fn rounded(radius: f32) -> CornerRadius {

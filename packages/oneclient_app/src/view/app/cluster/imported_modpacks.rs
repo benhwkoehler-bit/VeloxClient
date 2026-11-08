@@ -190,7 +190,7 @@ impl Component for PackRow {
             .spacing(16.)
             .padding(Gaps::new_symmetric(12., 16.))
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .child(icon)
             .child(
                 rect()

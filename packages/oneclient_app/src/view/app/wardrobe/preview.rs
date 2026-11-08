@@ -22,7 +22,7 @@ use crate::ui::border_all_color;
 fn panel_box() -> Rect {
     rect()
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .overflow(Overflow::Clip)
 }
@@ -30,7 +30,7 @@ fn panel_box() -> Rect {
 fn wardrobe_panel() -> Rect {
     rect()
         .corner_radius(rounded(16.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
 }
 
@@ -248,7 +248,7 @@ impl Component for OutfitSwitcher {
                     .center()
                     .padding(Gaps::new_symmetric(0., 10.))
                     .corner_radius(rounded(8.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .border(border_all_color(1., colors::component_border()))
                     .child(
                         label()
@@ -381,7 +381,7 @@ impl Component for PreviewPanel {
                     .padding(Gaps::new_all(10.))
                     .spacing(8.)
                     .corner_radius(rounded(12.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .border(border_all_color(1., colors::component_border()))
                     .child(
                         label()
@@ -419,7 +419,7 @@ impl Component for PreviewPanel {
                     .spacing(8.)
                     .cross_align(Alignment::Center)
                     .corner_radius(rounded(12.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .border(border_all_color(1., colors::component_border()))
                     .child(
                         label()
@@ -608,7 +608,7 @@ impl Component for VariantChip {
                     .font_size(text_size(12.))
                     .font_weight(FontWeight::MEDIUM)
                     .color(if self.selected {
-                        colors::fg_primary()
+                        colors::on_brand()
                     } else {
                         colors::fg_secondary()
                     }),
@@ -998,7 +998,7 @@ impl Component for StoreDetailPanel {
                         rect()
                             .padding(Gaps::new_symmetric(3., 8.))
                             .corner_radius(rounded(5.))
-                            .background(colors::component_bg())
+                            .background(crate::theme::glass::glass_over(colors::component_bg()))
                             .border(border_all_color(1., colors::component_border()))
                             .child(
                                 label()

@@ -13,7 +13,11 @@ const PRESS_MS: u64 = 110;
 use crate::{
     components::{Icon, IconTint, IconType, TooltipPlacement, tooltip::use_tooltip_anchor},
     i18n::t,
-    theme::{colors, rounded, text_size},
+    theme::{
+        colors,
+        glass::{glass_corners, glass_over},
+        text_size,
+    },
 };
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -368,7 +372,11 @@ impl Component for Button {
         rect.style_mut().clone_from(&self.style);
 
         rect = rect
-            .background(background)
+            .background(if self.variant == ButtonVariant::Ghost {
+                Fill::from(background)
+            } else {
+                Fill::from(glass_over(background))
+            })
             .color(foreground)
             .scale((press_scale, press_scale));
 
@@ -469,28 +477,28 @@ fn size_layout(size: ButtonSize) -> (Gaps, CornerRadius, f32, Size, Size) {
     match size {
         ButtonSize::Small => (
             Gaps::new_symmetric(4., 8.),
-            rounded(6.),
+            glass_corners(),
             12.,
             Size::auto(),
             Size::auto(),
         ),
         ButtonSize::Medium => (
             Gaps::new_symmetric(6., 12.),
-            rounded(8.),
+            glass_corners(),
             14.,
             Size::auto(),
             Size::auto(),
         ),
         ButtonSize::Large => (
             Gaps::new_symmetric(8., 32.),
-            rounded(10.),
+            glass_corners(),
             18.,
             Size::auto(),
             Size::auto(),
         ),
         ButtonSize::Icon => (
             Gaps::new_all(6.),
-            rounded(8.),
+            glass_corners(),
             14.,
             Size::px(32.),
             Size::px(32.),
@@ -504,7 +512,7 @@ pub fn link_button() -> Button {
         .child(
             Icon::new(IconType::LinkExternal01)
                 .size(14.)
-                .color(colors::fg_primary()),
+                .color(colors::on_brand()),
         )
         .child(label().text(t("oneclient.common.open")))
 }

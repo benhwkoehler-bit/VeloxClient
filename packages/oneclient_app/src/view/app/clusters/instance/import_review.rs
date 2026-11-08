@@ -281,7 +281,7 @@ fn flagged_card(
         .spacing(12.)
         .padding(Gaps::new_all(14.))
         .corner_radius(rounded(10.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             rect()
@@ -428,7 +428,7 @@ impl Component for AlternativeOption {
                 .height(Size::px(OPTION_H))
                 .padding(Gaps::new_symmetric(0., 12.))
                 .corner_radius(rounded(12.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::component_border()))
                 .child(content)
                 .into_element();

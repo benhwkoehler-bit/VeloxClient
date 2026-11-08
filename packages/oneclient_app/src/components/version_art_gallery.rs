@@ -100,7 +100,7 @@ impl Component for VersionArtGallery {
                             .content(Content::Flex)
                             .corner_radius(rounded(16.))
                             .overflow(Overflow::Clip)
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .border(border_all_color(1., colors::component_border()))
                             .child(header(move |_| header_close.call(())))
                             .child(scroll)

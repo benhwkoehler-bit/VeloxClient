@@ -207,7 +207,7 @@ impl Component for LogViewer {
             .width(Size::fill())
             .height(Size::fill())
             .overflow(Overflow::Clip)
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .corner_radius(rounded(12.))
             .maybe_child(
                 (!self.title.is_empty() || streaming)

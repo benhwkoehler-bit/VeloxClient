@@ -815,7 +815,7 @@ impl Component for Sidebar {
             .vertical()
             .content(Content::Flex)
             .corner_radius(rounded(20.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., colors::component_border()))
             .overflow(Overflow::Clip)
             .on_sized(move |event: Event<SizedEventData>| {
@@ -1042,7 +1042,7 @@ fn sidebar_error(width: f32) -> Element {
         .spacing(8.)
         .corner_radius(rounded(20.))
         .border(border_all_color(1., colors::component_border()))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             label()
                 .text(t("oneclient.clusters.page.error.title"))

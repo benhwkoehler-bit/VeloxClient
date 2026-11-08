@@ -53,12 +53,16 @@ impl Component for OnboardingWelcome {
 
         let intro = use_animation(|conf| {
             conf.on_creation(OnCreation::Run);
-            AnimNum::new(0., 1.).time(INTRO_MS).function(Function::Linear)
+            AnimNum::new(0., 1.)
+                .time(INTRO_MS)
+                .function(Function::Linear)
         });
         let cursor = use_animation(|conf| {
             conf.on_creation(OnCreation::Run);
             conf.on_finish(OnFinish::reverse());
-            AnimNum::new(0., 1.).time(CURSOR_BLINK_MS).function(Function::Linear)
+            AnimNum::new(0., 1.)
+                .time(CURSOR_BLINK_MS)
+                .function(Function::Linear)
         });
 
         let progress = if *selection.reduce_motion.read() {
@@ -107,7 +111,7 @@ fn terminal_window(progress: f32, rest: f32, cursor_on: bool) -> impl IntoElemen
         .vertical()
         .width(Size::px(TERMINAL_WIDTH))
         .corner_radius(rounded(8.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(
             Border::new()
                 .fill(colors::component_border())
@@ -183,7 +187,10 @@ fn boot_lines(progress: f32) -> Vec<Element> {
                 .font_family(theme::PIXEL_FONT)
                 .font_size(text_size(LINE_SIZE))
                 .span(Span::new(prefix.to_string()).color(prefix_color))
-                .span(Span::new(typed(text, phase(progress, start, start + share))).color(colors::fg_primary()))
+                .span(
+                    Span::new(typed(text, phase(progress, start, start + share)))
+                        .color(colors::fg_primary()),
+                )
                 .into_element()
         })
         .collect()
@@ -194,26 +201,29 @@ fn pixel_logo(drawn: f32) -> impl IntoElement {
     let columns = LOGO[0].chars().count();
     let visible_columns = (drawn * columns as f32).ceil() as usize;
 
-    rect().vertical().spacing(LOGO_GAP).children(LOGO.iter().map(|row| {
-        rect()
-            .horizontal()
-            .spacing(LOGO_GAP)
-            .children(row.chars().enumerate().map(|(column, cell)| {
-                let lit = cell == 'X' && column < visible_columns;
-                // The newest column flashes white before settling to purple
-                let fill = match (lit, column + 1 == visible_columns && drawn < 1.) {
-                    (true, true) => colors::fg_primary(),
-                    (true, false) => colors::brand(),
-                    (false, _) => Color::TRANSPARENT,
-                };
-                rect()
-                    .width(Size::px(LOGO_PIXEL))
-                    .height(Size::px(LOGO_PIXEL))
-                    .background(fill)
-                    .into_element()
-            }))
-            .into_element()
-    }))
+    rect()
+        .vertical()
+        .spacing(LOGO_GAP)
+        .children(LOGO.iter().map(|row| {
+            rect()
+                .horizontal()
+                .spacing(LOGO_GAP)
+                .children(row.chars().enumerate().map(|(column, cell)| {
+                    let lit = cell == 'X' && column < visible_columns;
+                    // The newest column flashes before settling to the accent colour
+                    let fill = match (lit, column + 1 == visible_columns && drawn < 1.) {
+                        (true, true) => colors::fg_primary(),
+                        (true, false) => colors::brand(),
+                        (false, _) => Color::TRANSPARENT,
+                    };
+                    rect()
+                        .width(Size::px(LOGO_PIXEL))
+                        .height(Size::px(LOGO_PIXEL))
+                        .background(fill)
+                        .into_element()
+                }))
+                .into_element()
+        }))
 }
 
 fn welcome_line(progress: f32, cursor_on: bool) -> impl IntoElement {

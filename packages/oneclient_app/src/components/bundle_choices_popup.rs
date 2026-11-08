@@ -44,7 +44,7 @@ impl Component for BundleChoicesPopup {
                     .cross_align(Alignment::Center)
                     .padding(Gaps::new_symmetric(8., 10.))
                     .corner_radius(rounded(8.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .child(
                         label()
                             .text(title.clone())

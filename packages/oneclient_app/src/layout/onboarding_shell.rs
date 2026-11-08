@@ -147,7 +147,7 @@ const PROGRESS_BLOCK_GAP: f32 = 4.;
 const AURA_BREATH_MS: u64 = 6000;
 const AURA_SIZE: f32 = 900.;
 
-/// A slow purple glow behind the wizard; holds still with reduced motion
+/// A slow glow behind the wizard; holds still with reduced motion
 #[derive(PartialEq)]
 struct Aura {
     still: bool,

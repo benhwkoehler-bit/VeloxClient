@@ -54,7 +54,9 @@ pub fn path_block(caption: &'static str, path: &std::path::Path) -> Element {
                 .width(Size::fill())
                 .padding(Gaps::new_all(10.))
                 .corner_radius(rounded(8.))
-                .background(theme::colors::component_bg())
+                .background(crate::theme::glass::glass_over(
+                    theme::colors::component_bg(),
+                ))
                 .border(border_all_color(1., theme::colors::component_border()))
                 .child(
                     label()

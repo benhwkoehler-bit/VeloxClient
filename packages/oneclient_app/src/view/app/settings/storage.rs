@@ -112,7 +112,7 @@ fn hero(report: &StorageReport, refresh: Element) -> impl IntoElement {
         .spacing(16.)
         .padding(Gaps::new_symmetric(20., 16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             rect()
                 .vertical()
@@ -175,7 +175,7 @@ fn scan_card(scan: Option<&StorageScanProgress>) -> impl IntoElement {
         .spacing(10.)
         .padding(Gaps::new_symmetric(16., 16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(header)
         .child(proportion_bar(fraction, colors::brand()))
         .into_element()
@@ -217,7 +217,7 @@ impl Component for ReclaimRow {
             .spacing(16.)
             .padding(Gaps::new_symmetric(12., 16.))
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .maybe(self.empty, |el| el.opacity(colors::disabled_opacity()))
             .child(Icon::new(self.icon))
             .child(
@@ -259,7 +259,7 @@ fn usage_row(entry: &StorageEntry, largest: u64, bar: Color) -> impl IntoElement
         .spacing(16.)
         .padding(Gaps::new_symmetric(12., 16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             rect()
                 .vertical()
@@ -289,7 +289,7 @@ fn proportion_bar(fraction: f32, fill: Color) -> impl IntoElement {
         .width(Size::fill())
         .height(Size::px(4.))
         .corner_radius(rounded(2.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             rect()
                 .width(Size::percent(fraction.clamp(0.0, 1.0) * 100.))
@@ -393,7 +393,7 @@ fn empty_note(text: &'static str) -> impl IntoElement {
         .width(Size::fill())
         .padding(Gaps::new_symmetric(14., 16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             label()
                 .text(text)

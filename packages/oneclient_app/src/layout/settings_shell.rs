@@ -578,7 +578,7 @@ fn search_results(query: &SearchQuery, mut search: State<String>) -> Vec<Element
                 .width(Size::fill())
                 .padding(Gaps::new_symmetric(10., 14.))
                 .corner_radius(rounded(12.))
-                .background(colors::page_elevated())
+                .background(crate::theme::glass::glass_over(colors::page_elevated()))
                 .child(
                     label()
                         .text(t("oneclient.layout.settings.search.empty"))
@@ -617,7 +617,7 @@ fn search_results(query: &SearchQuery, mut search: State<String>) -> Vec<Element
                 .spacing(12.)
                 .padding(Gaps::new_symmetric(12., 16.))
                 .corner_radius(rounded(12.))
-                .background(colors::page_elevated())
+                .background(crate::theme::glass::glass_over(colors::page_elevated()))
                 .cursor(CursorIcon::Pointer)
                 .on_press(move |_| {
                     set_pending_setting_focus(id);

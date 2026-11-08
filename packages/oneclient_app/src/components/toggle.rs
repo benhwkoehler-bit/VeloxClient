@@ -5,7 +5,7 @@ use freya::{
 
 use crate::{
     i18n::t,
-    theme::{colors, rounded, text_size},
+    theme::{colors, text_size},
     ui,
 };
 
@@ -140,7 +140,7 @@ impl Component for Switch {
                 rect()
                     .width(Size::px(WIDTH))
                     .height(Size::px(22.))
-                    .corner_radius(rounded(11.))
+                    .corner_radius(crate::theme::rounded_full(11.))
                     .padding(Gaps::new_all(3.))
                     .main_align(knob_align)
                     .cross_align(Alignment::Center)
@@ -154,13 +154,13 @@ impl Component for Switch {
                         rect()
                             .width(Size::px(HANDLE_SIZE))
                             .height(Size::px(HANDLE_SIZE))
-                            .corner_radius(rounded(8.))
+                            .corner_radius(crate::theme::rounded_full(8.))
                             .background(if disabled {
                                 colors::fg_secondary()
                             } else if on {
                                 colors::on_brand_strong()
                             } else {
-                                Color::WHITE
+                                colors::fg_primary()
                             })
                             .position(Position::new_absolute().right(right_offset.read().value())),
                     ),

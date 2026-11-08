@@ -5,7 +5,8 @@ use freya::{
 };
 
 use super::side_rail::SideRail;
-use crate::theme::{rounded, text_size};
+use crate::theme::glass::{glass_border, glass_corners, glass_edge, glass_pane, glass_panel};
+use crate::theme::text_size;
 use crate::{
     Route,
     components::{Avatar, Button, Icon, IconType, cluster_title, use_home_clusters},
@@ -64,13 +65,12 @@ impl Component for TopBar {
             .position(Position::new_absolute().top(0.).left(0.))
             .padding(Gaps::new(0., 0., 0., theme::RAIL_WIDTH_PX))
             .child(
-                rect()
+                glass_panel(rect())
                     .width(Size::fill())
                     .height(Size::fill())
-                    .background(colors::page_elevated())
                     .border(
                         Border::new()
-                            .fill(colors::component_border())
+                            .fill(glass_edge(false))
                             .width(BorderWidth {
                                 top: 0.,
                                 right: 0.,
@@ -175,7 +175,7 @@ fn notification_bell(unread: usize) -> impl IntoElement {
                 .position(Position::new_absolute().top(-4.).right(-4.))
                 .width(Size::px(16.))
                 .height(Size::px(16.))
-                .corner_radius(rounded(8.))
+                .corner_radius(crate::theme::rounded_full(8.))
                 .background(colors::danger())
                 .layer(Layer::Relative(3))
                 .center()
@@ -213,18 +213,9 @@ fn chip(hovering: bool) -> Rect {
         .height(Size::px(CHIP_HEIGHT_PX))
         .cross_align(Alignment::Center)
         .spacing(8.)
-        .corner_radius(rounded(4.))
-        .background(colors::component_bg())
-        .border(
-            Border::new()
-                .fill(if hovering {
-                    colors::component_border_hover()
-                } else {
-                    colors::component_border()
-                })
-                .width(1.)
-                .alignment(BorderAlignment::Inner),
-        )
+        .corner_radius(glass_corners())
+        .background(glass_pane(hovering))
+        .border(glass_border(hovering))
         .cursor(CursorIcon::Pointer)
 }
 
@@ -287,12 +278,7 @@ impl Component for AccountChip {
         let text_color = chip_text_color(hovering());
 
         chip(hovering())
-            .padding(Gaps::new(
-                0.,
-                CHIP_PADDING_PX,
-                0.,
-                CHIP_AVATAR_INSET_PX,
-            ))
+            .padding(Gaps::new(0., CHIP_PADDING_PX, 0., CHIP_AVATAR_INSET_PX))
             .on_pointer_over(move |_| hovering.set(true))
             .on_pointer_out(move |_| hovering.set(false))
             .on_press(move |_| dispatch.toggle_control_center())
@@ -309,7 +295,7 @@ impl Component for AccountChip {
                 rect()
                     .width(Size::px(STATUS_DOT_PX))
                     .height(Size::px(STATUS_DOT_PX))
-                    .corner_radius(rounded(STATUS_DOT_PX / 2.))
+                    .corner_radius(crate::theme::rounded_full(STATUS_DOT_PX / 2.))
                     .background(colors::success()),
             )
             .child(Icon::new(IconType::ChevronDown).size(14.).color(text_color))

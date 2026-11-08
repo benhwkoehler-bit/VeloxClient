@@ -147,7 +147,7 @@ fn panel(child: impl IntoElement) -> impl IntoElement {
         .height(Size::px(220.))
         .content(Content::Flex)
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .child(child)
 }

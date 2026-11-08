@@ -266,7 +266,7 @@ impl Component for ServerDetailsPopup {
             .padding(20.)
             .spacing(14.)
             .corner_radius(rounded(14.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., colors::component_border()))
             .child(
                 rect()
@@ -354,7 +354,7 @@ impl Component for ServerRow {
             .width(Size::fill())
             .height(Size::px(4.))
             .corner_radius(rounded(2.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .child(
                 rect()
                     .width(Size::percent(frac * 100.))
@@ -462,7 +462,7 @@ fn server_icon_placeholder(is_ip: bool, size: f32) -> Element {
         .width(Size::px(size))
         .height(Size::px(size))
         .corner_radius(rounded(6.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             Icon::new(icon)
                 .size(size * 0.5)

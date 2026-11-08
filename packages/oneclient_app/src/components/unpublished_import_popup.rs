@@ -122,7 +122,7 @@ fn dialog(
         .max_width(Size::window_percent(95.))
         .spacing(SECTION_GAP)
         .padding(Gaps::new_all(DIALOG_PAD))
-        .corner_radius(CornerRadius::new_all(16.))
+        .corner_radius(crate::theme::glass::glass_corners())
         .background(colors::card())
         .border(border_all_color(1., colors::component_border()))
         .shadow(Shadow::from((

@@ -476,7 +476,7 @@ impl Component for LogPicker {
                     .spacing(8.)
                     .padding(Gaps::new_symmetric(0., 12.))
                     .corner_radius(rounded(9.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .a11y_id(a11y_id)
                     .a11y_focusable(true)
                     .a11y_role(AccessibilityRole::Button)
@@ -534,7 +534,7 @@ impl Component for LogPicker {
                             .padding(6.)
                             .corner_radius(rounded(10.))
                             .border(ui::border_all_color(1., colors::component_border()))
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .overflow(Overflow::Clip)
                             .child(
                                 SegmentedControl::new(category)

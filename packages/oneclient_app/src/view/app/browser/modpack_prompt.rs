@@ -456,7 +456,7 @@ fn radio_row(
         .width(Size::px(16.))
         .height(Size::px(16.))
         .center()
-        .corner_radius(rounded(8.))
+        .corner_radius(crate::theme::rounded_full(8.))
         .border(border_all_color(1.5, ring))
         .maybe_child(active.then(|| {
             rect()
@@ -475,7 +475,7 @@ fn radio_row(
         .spacing(10.)
         .padding(Gaps::new_symmetric(0., 12.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., ring))
         .on_press(move |_| on_select())
         .child(radio)

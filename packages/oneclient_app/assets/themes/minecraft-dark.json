@@ -7,13 +7,13 @@
   "pixel_icons": true,
   "colors": {
     "light": false,
-    "page": "#0B0B10",
-    "page_elevated": "#13131B",
-    "card": "#16161F",
-    "component": "#20202C",
+    "page": "#000000",
+    "page_elevated": "#161616",
+    "card": "#191919",
+    "component": "#242424",
     "border": "#FFFFFF14",
-    "text": "#ECEAF5",
-    "text_secondary": "#8A879B",
-    "accent": "#7C3AED"
+    "text": "#EEEEEE",
+    "text_secondary": "#8F8F8F",
+    "accent": "#FFFFFF"
   }
 }

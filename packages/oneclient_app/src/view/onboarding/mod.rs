@@ -354,7 +354,7 @@ pub(crate) fn terminal_panel(content: impl IntoElement) -> impl IntoElement {
         .vertical()
         .width(Size::fill())
         .corner_radius(rounded(8.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .overflow(Overflow::Clip)
         .child(

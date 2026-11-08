@@ -11,10 +11,13 @@ use crate::hooks::{
 };
 use crate::i18n::t;
 use crate::routes::Route;
-use crate::theme::{self, colors, rounded, text_size};
+use crate::theme::glass::{GLASS_RADIUS_PX, glass_border, glass_corners, glass_edge, glass_pane};
+use crate::theme::{self, colors, text_size};
 use crate::utils::sort_clusters_for_home;
 use crate::view::app::{launch_button_state, launch_syncing, shared_dir_taken};
 
+const PICKER_GLASS_ALPHA: u8 = 215;
+const PICKER_BLUR: f32 = 18.;
 const LAUNCH_WIDTH_PX: f32 = 300.;
 const LAUNCH_HEIGHT_PX: f32 = 62.;
 const PICKER_TOGGLE_WIDTH_PX: f32 = 50.;
@@ -171,27 +174,20 @@ impl Component for PlayButton {
         let cluster_id = self.cluster_id;
         let dispatch = use_dispatch();
 
-        let background = if !enabled {
-            colors::brand_disabled()
-        } else if hovering() {
-            colors::brand_hover()
-        } else {
-            colors::brand()
-        };
-
         rect()
             .vertical()
             .width(Size::px(LAUNCH_WIDTH_PX))
             .height(Size::px(LAUNCH_HEIGHT_PX))
             .center()
             .spacing(4.)
-            .background(background)
-            .corner_radius(CornerRadius::new(4., 0., 0., 4.))
+            .background(glass_pane(enabled && hovering()))
+            .border(glass_border(hovering()))
+            .corner_radius(CornerRadius::new(GLASS_RADIUS_PX, 0., 0., GLASS_RADIUS_PX))
             .shadow(
                 Shadow::new()
                     .blur(30.)
                     .y(10.)
-                    .color(colors::brand().with_a(90)),
+                    .color(Color::BLACK.with_a(120)),
             )
             .cursor(if enabled {
                 CursorIcon::Pointer
@@ -210,14 +206,14 @@ impl Component for PlayButton {
                     .text(format!("▶ {}", self.title))
                     .font_family(theme::PIXEL_FONT)
                     .font_size(text_size(18.))
-                    .color(colors::on_brand()),
+                    .color(colors::fg_primary()),
             )
             .child(
                 label()
                     .text(self.subtitle.clone())
                     .font_family(theme::PIXEL_FONT)
                     .font_size(text_size(11.))
-                    .color(colors::on_brand().with_a(210)),
+                    .color(colors::fg_primary().with_a(210)),
             )
     }
 }
@@ -236,14 +232,10 @@ impl Component for PickerToggle {
             .width(Size::px(PICKER_TOGGLE_WIDTH_PX))
             .height(Size::px(LAUNCH_HEIGHT_PX))
             .center()
-            .background(if hovering() {
-                colors::brand_hover()
-            } else {
-                colors::brand()
-            })
+            .background(glass_pane(hovering()))
             .border(
                 Border::new()
-                    .fill(colors::on_brand().with_a(50))
+                    .fill(glass_edge(false))
                     .width(BorderWidth {
                         top: 0.,
                         right: 0.,
@@ -252,7 +244,7 @@ impl Component for PickerToggle {
                     })
                     .alignment(BorderAlignment::Inner),
             )
-            .corner_radius(CornerRadius::new(0., 4., 4., 0.))
+            .corner_radius(CornerRadius::new(0., GLASS_RADIUS_PX, GLASS_RADIUS_PX, 0.))
             .cursor(CursorIcon::Pointer)
             .on_pointer_over(move |_| hovering.set(true))
             .on_pointer_out(move |_| hovering.set(false))
@@ -263,7 +255,7 @@ impl Component for PickerToggle {
             .child(
                 Icon::new(IconType::ChevronDown)
                     .size(18.)
-                    .color(colors::on_brand()),
+                    .color(colors::fg_primary()),
             )
     }
 }
@@ -298,15 +290,11 @@ impl Component for VersionPicker {
             .offset_y((1. - opened) * PICKER_OPEN_RISE_PX)
             .opacity(opened)
             .layer(Layer::OverlayLevel(3))
-            .background(colors::page_elevated())
-            .corner_radius(rounded(4.))
+            .background(colors::page_elevated().with_a(PICKER_GLASS_ALPHA))
+            .backdrop_blur(PICKER_BLUR)
+            .corner_radius(glass_corners())
             .overflow(Overflow::Clip)
-            .border(
-                Border::new()
-                    .fill(colors::component_border())
-                    .width(1.)
-                    .alignment(BorderAlignment::Inner),
-            )
+            .border(glass_border(false))
             .child(
                 rect()
                     .width(Size::fill())
@@ -375,7 +363,9 @@ impl Component for PickerRow {
                     .max_lines(1)
                     .font_family(theme::PIXEL_FONT)
                     .font_size(text_size(12.))
-                    .maybe(self.active, |p| p.span(Span::new("# ").color(colors::brand())))
+                    .maybe(self.active, |p| {
+                        p.span(Span::new("# ").color(colors::brand()))
+                    })
                     .span(
                         Span::new(cluster_title(&self.cluster)).color(if highlighted {
                             colors::fg_primary()

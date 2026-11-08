@@ -219,7 +219,7 @@ fn folder_row(
                 .padding(Gaps::new_symmetric(8., 12.))
                 .spacing(10.)
                 .corner_radius(rounded(10.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::component_border()))
                 .child(
                     Icon::new(IconType::FolderCheck)

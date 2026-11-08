@@ -83,7 +83,7 @@ impl Component for MarkdownPanel {
             .width(Size::fill())
             .padding(Gaps::new_all(20.))
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., colors::component_border()))
             .child(
                 Markdown::new(self.body.clone())
@@ -185,7 +185,7 @@ fn version_pager(current: usize, total_pages: usize, page: State<usize>) -> impl
             .width(Size::px(32.))
             .height(Size::px(32.))
             .corner_radius(rounded(8.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::component_border()))
             .maybe(enabled, |el| {
                 el.cursor(CursorIcon::Pointer)
@@ -272,7 +272,7 @@ fn version_row(
         .content(Content::Flex)
         .padding(Gaps::new_all(12.))
         .corner_radius(rounded(10.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .child(release_badge(v.release_type))
         .child(

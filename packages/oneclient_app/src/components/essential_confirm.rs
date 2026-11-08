@@ -150,7 +150,7 @@ impl Component for WarningBody {
                             .width(Size::fill())
                             .padding(Gaps::new_all(12.))
                             .corner_radius(rounded(8.))
-                            .background(colors::component_bg())
+                            .background(crate::theme::glass::glass_over(colors::component_bg()))
                             .border(border_all_color(1., colors::component_border()))
                             .child(Markdown::new(self.body.clone()).width(Size::fill()).style(
                                 MarkdownStyle {

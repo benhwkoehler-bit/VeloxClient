@@ -204,7 +204,7 @@ pub(crate) fn login_dialog(
                         .spacing(18.)
                         .padding(Gaps::new_all(28.))
                         .corner_radius(rounded(16.))
-                        .background(colors::page_elevated())
+                        .background(crate::theme::glass::glass_over(colors::page_elevated()))
                         .border(border_all_color(1., colors::component_border()))
                         .child(
                             label()
@@ -348,7 +348,7 @@ fn guidance_block(guidance: AuthErrorGuidance) -> impl IntoElement {
         .spacing(10.)
         .padding(Gaps::new_all(14.))
         .corner_radius(rounded(12.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             label()
@@ -401,7 +401,7 @@ fn device_code_dialog_body(code: String, verification_uri: String) -> impl IntoE
                 .center()
                 .padding(Gaps::new_symmetric(20., 16.))
                 .corner_radius(rounded(14.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::brand()))
                 .child(
                     label()

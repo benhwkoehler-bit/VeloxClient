@@ -93,7 +93,7 @@ impl Component for GalleryTile {
             .height(Size::px(TILE_PREVIEW_H))
             .center()
             .overflow(Overflow::Clip)
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .maybe_child(thumbnail.map(|(url, bytes)| {
                 ImageViewer::new((url, bytes))
                     .width(Size::fill())
@@ -121,7 +121,7 @@ impl Component for GalleryTile {
             .max_width(Size::px(MAX_COL_W))
             .corner_radius(rounded(10.))
             .overflow(Overflow::Clip)
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(
                 border_all_color(
                     1.,
@@ -283,7 +283,7 @@ fn chevron_btn(
         .width(Size::px(44.))
         .height(Size::px(44.))
         .center()
-        .corner_radius(rounded(22.));
+        .corner_radius(crate::theme::rounded_full(22.));
 
     if !enabled {
         return base

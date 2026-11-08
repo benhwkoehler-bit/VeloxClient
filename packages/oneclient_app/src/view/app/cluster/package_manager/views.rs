@@ -523,7 +523,7 @@ pub(super) fn toolbar_bar(
         .overflow(Overflow::Clip)
         .padding(Gaps::new_symmetric(8., 12.))
         .corner_radius(top_corners)
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .on_sized(move |event: Event<SizedEventData>| {
             let next = event.data().area.width();
             if (*toolbar_width.peek() - next).abs() > 0.5 {
@@ -631,7 +631,7 @@ impl Component for CategoryChip {
                     .font_weight(FontWeight::MEDIUM)
                     .max_lines(1)
                     .color(if selected {
-                        Color::WHITE
+                        colors::on_brand_strong()
                     } else {
                         colors::fg_primary()
                     }),
@@ -1073,7 +1073,9 @@ impl Component for ContentBox {
                                 .spacing(CARD_SPACING)
                                 .padding(Gaps::new_all(20.))
                                 .corner_radius(rounded(14.))
-                                .background(colors::page_elevated())
+                                .background(
+                                    crate::theme::glass::glass_over(colors::page_elevated()),
+                                )
                                 .border(border_all_color(1., colors::component_border()))
                                 .child(
                                     label()
@@ -1161,7 +1163,7 @@ impl Component for ContentBox {
             .height(Size::flex(1.0))
             .padding(Gaps::new(0., 12., 12., 12.))
             .corner_radius(bottom_corners)
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .overflow(Overflow::Clip)
             .content(Content::Flex)
             .children(self.notices.iter().map(|text| notice_bar(text.clone())))

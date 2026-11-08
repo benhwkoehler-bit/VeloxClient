@@ -140,7 +140,7 @@ impl Component for VersionCard {
             .height(Size::px(CARD_HEIGHT_PX))
             .corner_radius(rounded(16.))
             .overflow(Overflow::Clip)
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .a11y_id(a11y_id)
             .a11y_focusable(true)
             .a11y_role(AccessibilityRole::Button)
@@ -179,9 +179,9 @@ impl Component for VersionCard {
                     .background(
                         LinearGradient::new()
                             .angle(0.)
-                            .stop((Color::from_af32rgb(0.1, 11, 16, 19), 0.))
-                            .stop((Color::from_af32rgb(0.6, 11, 16, 19), 55.))
-                            .stop((Color::from_af32rgb(0.95, 11, 16, 19), 100.)),
+                            .stop((Color::from_af32rgb(0.1, 13, 13, 13), 0.))
+                            .stop((Color::from_af32rgb(0.6, 13, 13, 13), 55.))
+                            .stop((Color::from_af32rgb(0.95, 13, 13, 13), 100.)),
                     )
                     .child(
                         // VeloxClient: the picked card reads `# 26.3 Fabric`
@@ -209,7 +209,7 @@ impl Component for VersionCard {
                     .layer(Layer::Relative(4))
                     .padding(Gaps::new_symmetric(4., 8.))
                     .corner_radius(rounded(6.))
-                    .background(Color::from_af32rgb(0.66, 11, 16, 19))
+                    .background(Color::from_af32rgb(0.66, 13, 13, 13))
                     .child(
                         label()
                             .text(tf(

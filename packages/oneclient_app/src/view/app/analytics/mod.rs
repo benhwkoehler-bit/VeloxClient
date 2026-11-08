@@ -56,7 +56,7 @@ pub fn analytics_placeholder(note: &str) -> Element {
                 .width(Size::fill())
                 .padding(Gaps::new_symmetric(16., 24.))
                 .corner_radius(rounded(12.))
-                .background(colors::page_elevated())
+                .background(crate::theme::glass::glass_over(colors::page_elevated()))
                 .border(border_all_color(1., colors::component_border()))
                 .center()
                 .child(
@@ -221,7 +221,7 @@ pub(super) fn nav_button(
         .height(Size::px(30.))
         .center()
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .maybe(enabled, |el| {
             el.on_press(on_press).cursor(CursorIcon::Pointer)
@@ -235,6 +235,6 @@ pub(super) fn card() -> Rect {
         .vertical()
         .padding(20.)
         .corner_radius(rounded(14.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
 }

@@ -293,7 +293,7 @@ impl Component for VariantSwatch {
                 .width(Size::px(14.))
                 .height(Size::px(22.))
                 .corner_radius(rounded(5.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .overflow(Overflow::Clip)
                 .cursor(CursorIcon::Pointer)
                 .on_pointer_enter(move |_| hovered.set(true))
@@ -339,7 +339,7 @@ fn swatch_column(swatches: &[Swatch], on_pick: EventHandler<i32>) -> Element {
                 .padding(Gaps::new_symmetric(0., 2.))
                 .center()
                 .corner_radius(rounded(5.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(hairline(colors::component_border()))
                 .child(
                     label()
@@ -391,7 +391,11 @@ impl Component for WardrobeCard {
             colors::component_border()
         };
 
-        let strip_color = colors::fg_primary();
+        let strip_color = if self.equipped {
+            colors::on_brand()
+        } else {
+            colors::fg_primary()
+        };
         let strip_line = if *strip_hovered.read() && self.action_enabled {
             colors::component_border_hover()
         } else {
@@ -418,7 +422,7 @@ impl Component for WardrobeCard {
                 .height(Size::px(22.))
                 .center()
                 .corner_radius(rounded(6.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(hairline(colors::component_border()))
                 .cursor(CursorIcon::Pointer)
                 .on_press(move |e: Event<PressEventData>| {
@@ -481,7 +485,7 @@ impl Component for WardrobeCard {
             .height(Size::fill())
             .content(Content::Flex)
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .overflow(Overflow::Clip)
             .opacity(if enabled { 1. } else { 0.5 })
             .cursor(if enabled {
@@ -693,7 +697,7 @@ impl Component for RenamePopup {
                     .padding(Gaps::new_all(10.))
                     .spacing(8.)
                     .corner_radius(rounded(12.))
-                    .background(colors::page_elevated())
+                    .background(crate::theme::glass::glass_over(colors::page_elevated()))
                     .border(hairline(colors::component_border()))
                     .child(
                         label()
@@ -748,7 +752,7 @@ impl Component for SectionChip {
     fn render(&self) -> impl IntoElement {
         let mut hovered = use_state(|| false);
         let color = if self.selected {
-            colors::fg_primary()
+            colors::on_brand()
         } else {
             colors::fg_secondary()
         };

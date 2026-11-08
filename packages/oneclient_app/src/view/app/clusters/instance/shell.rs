@@ -62,7 +62,7 @@ pub fn shell(parts: Shell) -> Element {
                         .content(Content::Flex)
                         .corner_radius(rounded(16.))
                         .overflow(Overflow::Clip)
-                        .background(colors::page_elevated())
+                        .background(crate::theme::glass::glass_over(colors::page_elevated()))
                         .border(border_all_color(1., colors::component_border()))
                         .child(rail)
                         .child(

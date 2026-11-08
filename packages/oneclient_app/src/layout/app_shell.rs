@@ -135,7 +135,7 @@ impl Component for LaunchErrorDialog {
                         rect()
                             .vertical()
                             .width(Size::px(560.))
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .corner_radius(rounded(16.))
                             .padding(Gaps::new_all(24.))
                             .spacing(16.)

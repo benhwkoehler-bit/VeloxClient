@@ -44,9 +44,7 @@ half4 main(float2 fragCoord) {
     float strength = mix(0.11, 0.34, smoothstep(0.1, 0.75, fromCenter));
     strength *= 0.55 + 0.45 * hash(cell + 7.0);
 
-    float3 color = hash(cell + 13.0) > 0.9
-        ? float3(1.0, 0.8, 1.6)
-        : float3(0.62, 0.6, 0.72);
+    float3 color = hash(cell + 13.0) > 0.9 ? float3(1.2) : float3(0.62);
     return half4(half3(color * strength), 1.0);
 }
 "#;

@@ -257,7 +257,7 @@ impl Component for ColorPicker {
                         .interactive(false)
                         .width(Size::px(SV_HANDLE))
                         .height(Size::px(SV_HANDLE))
-                        .corner_radius(rounded(SV_HANDLE))
+                        .corner_radius(crate::theme::rounded_full(SV_HANDLE))
                         .background(current)
                         .border(
                             Border::new()
@@ -312,7 +312,7 @@ impl Component for ColorPicker {
                         .interactive(false)
                         .width(Size::px(HUE_HANDLE))
                         .height(Size::px(HUE_HANDLE))
-                        .corner_radius(rounded(HUE_HANDLE))
+                        .corner_radius(crate::theme::rounded_full(HUE_HANDLE))
                         .background(Color::WHITE)
                         .shadow(handle_shadow()),
                 );
@@ -368,7 +368,7 @@ impl Component for ColorPicker {
                         .spacing(14.)
                         .padding(POPUP_PADDING)
                         .corner_radius(rounded(16.))
-                        .background(colors::page_elevated())
+                        .background(crate::theme::glass::glass_over(colors::page_elevated()))
                         .border(border_all_color(1., colors::component_border()))
                         .shadow(Shadow::from((
                             0.,

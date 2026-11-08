@@ -154,7 +154,7 @@ fn icon_box(icon: IconType) -> impl IntoElement {
         .width(Size::px(44.))
         .height(Size::px(44.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(Icon::new(icon).size(20.).color(colors::fg_secondary()))
         .into_element()
 }

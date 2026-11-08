@@ -18,7 +18,7 @@ fn tinted_card(accent: Color, title: String, body: String) -> Rect {
         .width(Size::fill())
         .spacing(8.)
         .padding(Gaps::new_all(12.))
-        .corner_radius(CornerRadius::new_all(10.))
+        .corner_radius(crate::theme::glass::glass_corners())
         .background(accent.with_a(24))
         .border(border_all_color(1., accent.with_a(110)))
         .child(
@@ -55,8 +55,8 @@ pub fn warning_list(rows: impl IntoIterator<Item = (String, Option<String>)>) ->
         .width(Size::fill())
         .spacing(6.)
         .padding(Gaps::new_all(10.))
-        .corner_radius(CornerRadius::new_all(8.))
-        .background(colors::component_bg())
+        .corner_radius(crate::theme::glass::glass_corners())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .children(rows.into_iter().map(|(name, note)| list_row(name, note)))
 }

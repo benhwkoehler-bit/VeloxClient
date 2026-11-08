@@ -5,13 +5,13 @@
   "pixel_font_size": 10,
   "colors": {
     "light": false,
-    "page": "#0B0B10",
-    "page_elevated": "#111118",
-    "card": "#16161F",
-    "component": "#1C1C27",
+    "page": "#000000",
+    "page_elevated": "#131313",
+    "card": "#191919",
+    "component": "#202020",
     "border": "#FFFFFF14",
-    "text": "#ECEAF5",
-    "text_secondary": "#8A879B",
-    "accent": "#7C3AED"
+    "text": "#EEEEEE",
+    "text_secondary": "#8F8F8F",
+    "accent": "#FFFFFF"
   }
 }

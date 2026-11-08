@@ -137,7 +137,7 @@ fn pill(text: String) -> impl IntoElement {
         .center()
         .padding(Gaps::new_symmetric(2., 8.))
         .corner_radius(rounded(999.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             label()

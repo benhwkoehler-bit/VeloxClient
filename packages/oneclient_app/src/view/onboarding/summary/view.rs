@@ -298,7 +298,7 @@ fn summary_section(title: &str, note: Option<&str>, rows: Vec<Element>) -> impl 
                 .width(Size::fill())
                 .spacing(2.)
                 .corner_radius(rounded(12.))
-                .background(colors::page_elevated())
+                .background(crate::theme::glass::glass_over(colors::page_elevated()))
                 .border(border_all_color(1., colors::component_border()))
                 .padding(Gaps::new_symmetric(6., 4.))
                 .children(rows),

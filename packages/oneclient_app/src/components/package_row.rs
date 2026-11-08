@@ -1094,7 +1094,7 @@ pub(crate) fn icon_box(icon: IconType, size: f32) -> Element {
         .width(Size::px(size))
         .height(Size::px(size))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             Icon::new(icon)
                 .size(size * 0.4)
@@ -1167,7 +1167,7 @@ fn updated_badge() -> Element {
 fn status_tag(text: impl Into<String>, accent: Color) -> Element {
     rect()
         .corner_radius(rounded(4.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             rect()
                 .padding(Gaps::new(1., 6., 2., 6.))
@@ -1221,7 +1221,7 @@ pub(crate) fn pill(icon: Option<Element>, text: String, accent: Color) -> Elemen
         .padding(Gaps::new_symmetric(2., 8.))
         .corner_radius(rounded(999.))
         .border(border_all_color(1., colors::component_border()))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .maybe_child(icon)
         .child(
             label()

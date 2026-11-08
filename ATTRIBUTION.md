@@ -104,5 +104,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Liquid Glass Studio
+
+The liquid glass refraction, Fresnel and glare in `packages/oneclient_app/src/theme/glass.rs` are
+ported from [Liquid Glass Studio](https://github.com/iyinchao/liquid-glass-studio), Copyright (c)
+2024 Charles Yin, under the MIT License. See `packages/oneclient_app/src/theme/glass.LICENSE`.
+
 [Gamemode]: https://github.com/FeralInteractive/gamemode
 [Rust Gamemode Internal Linking]: https://github.com/SophieSilver/linking-gamemode

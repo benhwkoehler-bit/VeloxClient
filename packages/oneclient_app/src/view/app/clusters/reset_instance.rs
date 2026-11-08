@@ -76,7 +76,7 @@ impl Component for ResetInstanceModal {
                             .spacing(16.)
                             .padding(Gaps::new_all(20.))
                             .corner_radius(rounded(16.))
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .border(border_all_color(1., colors::component_border()))
                             .child(
                                 label()

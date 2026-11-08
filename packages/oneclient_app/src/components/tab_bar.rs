@@ -139,7 +139,7 @@ fn count_pill(count: &str, font_size: f32) -> impl IntoElement {
         .center()
         .padding(Gaps::new_symmetric(1., 6.))
         .corner_radius(rounded(10.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             label()
                 .text(count.to_string())

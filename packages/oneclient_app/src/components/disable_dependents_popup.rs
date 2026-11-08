@@ -203,7 +203,7 @@ fn row(name: &str, icon: IconType, accent: Color) -> impl IntoElement {
         .spacing(8.)
         .padding(Gaps::new_symmetric(7., 10.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .content(Content::Flex)
         .child(Icon::new(icon).size(13.).color(accent))
         .child(

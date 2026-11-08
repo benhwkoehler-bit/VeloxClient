@@ -209,7 +209,7 @@ impl Component for DropVeil {
             .interactive(false)
             .center()
             .opacity(progress)
-            .background(Color::from_argb(190, 10, 14, 20))
+            .background(Color::from_argb(190, 12, 12, 12))
             .child(
                 rect()
                     .vertical()
@@ -251,7 +251,7 @@ fn icon_badge(icon: IconType, size: f32, icon_size: f32) -> impl IntoElement {
         .width(Size::px(size))
         .height(Size::px(size))
         .center()
-        .corner_radius(rounded(size / 2.))
+        .corner_radius(crate::theme::rounded_full(size / 2.))
         .background(colors::brand().with_a(46))
         .child(Icon::new(icon).size(icon_size).color(colors::brand()))
 }

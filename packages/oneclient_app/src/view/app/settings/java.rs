@@ -134,7 +134,7 @@ fn runtimes_table(
             .width(Size::fill())
             .padding(Gaps::new_symmetric(16., 16.))
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .child(
                 label()
                     .text(t("oneclient.settings.java.empty"))
@@ -148,7 +148,7 @@ fn runtimes_table(
         .vertical()
         .width(Size::fill())
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .overflow(Overflow::Clip)
         .child(table_header());
@@ -189,7 +189,7 @@ fn table_header() -> impl IntoElement {
         .cross_align(Alignment::Center)
         .spacing(12.)
         .padding(Gaps::new_symmetric(8., 14.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(head(
             t("oneclient.settings.java.table.vendor"),
             Size::px(130.),
@@ -346,7 +346,7 @@ fn confirm_remove_modal(
                         .spacing(14.)
                         .padding(Gaps::new_all(20.))
                         .corner_radius(rounded(14.))
-                        .background(colors::page_elevated())
+                        .background(crate::theme::glass::glass_over(colors::page_elevated()))
                         .child(
                             label()
                                 .text(t("oneclient.settings.java.remove.title"))

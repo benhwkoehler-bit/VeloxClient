@@ -13,7 +13,11 @@ use crate::{
         settled_or_loading, use_active_cluster_id, use_browser_type, use_clusters, use_dispatch,
     },
     i18n::t,
-    theme::{self, colors, rounded, text_size},
+    theme::{
+        self, colors,
+        glass::{glass_border, glass_corners, glass_edge, glass_pane, glass_panel},
+        text_size,
+    },
     utils::default_cluster,
 };
 
@@ -75,17 +79,16 @@ impl Component for SideRail {
             item_tops,
         };
 
-        rect()
+        glass_panel(rect())
             .vertical()
             .width(Size::px(theme::RAIL_WIDTH_PX))
             .height(Size::window_percent(100.))
             .content(Content::Flex)
             .position(Position::new_absolute().top(0.).left(0.))
             .layer(Layer::OverlayLevel(2))
-            .background(colors::page_elevated())
             .border(
                 Border::new()
-                    .fill(colors::component_border())
+                    .fill(glass_edge(false))
                     .width(BorderWidth {
                         top: 0.,
                         right: 1.,
@@ -95,7 +98,12 @@ impl Component for SideRail {
                     .alignment(BorderAlignment::Inner),
             )
             .cross_align(Alignment::Center)
-            .padding(Gaps::new(RAIL_TOP_PADDING_PX, 0., RAIL_BOTTOM_PADDING_PX, 0.))
+            .padding(Gaps::new(
+                RAIL_TOP_PADDING_PX,
+                0.,
+                RAIL_BOTTOM_PADDING_PX,
+                0.,
+            ))
             .spacing(4.)
             .offset_x((eased - 1.0) * theme::RAIL_WIDTH_PX)
             .child(RailIndicator {
@@ -144,7 +152,12 @@ impl Component for SideRail {
                 t("oneclient.components.navbar.stats"),
                 RailAction::Route(Route::Stats {}),
             ))
-            .child(rect().width(Size::fill()).height(Size::flex(1.0)).window_drag())
+            .child(
+                rect()
+                    .width(Size::fill())
+                    .height(Size::flex(1.0))
+                    .window_drag(),
+            )
             .child(item(
                 SETTINGS_INDEX,
                 IconType::Settings02,
@@ -217,15 +230,15 @@ impl Component for RailIndicator {
             )
             .width(Size::px(ITEM_WIDTH_PX))
             .height(Size::px(ITEM_HEIGHT_PX))
-            .corner_radius(rounded(4.))
-            .background(colors::component_bg())
-            .border(
-                Border::new()
-                    .fill(colors::component_border_hover())
-                    .width(1.)
-                    .alignment(BorderAlignment::Inner),
+            .corner_radius(glass_corners())
+            .background(glass_pane(true))
+            .border(glass_border(true))
+            .shadow(
+                Shadow::new()
+                    .blur(10.)
+                    .y(3.)
+                    .color(Color::BLACK.with_a(120)),
             )
-            .shadow(Shadow::new().blur(10.).y(3.).color(Color::BLACK.with_a(120)))
             .opacity(opacity)
             .interactive(false)
             .child(
@@ -326,7 +339,7 @@ impl Component for RailItem {
             .main_align(Alignment::Center)
             .spacing(6.)
             .cross_align(Alignment::Center)
-            .corner_radius(rounded(4.))
+            .corner_radius(glass_corners())
             .background(background)
             .a11y_id(a11y_id)
             .a11y_focusable(true)
@@ -359,7 +372,6 @@ impl Component for RailItem {
             )
     }
 }
-
 
 #[cfg(test)]
 mod tests {

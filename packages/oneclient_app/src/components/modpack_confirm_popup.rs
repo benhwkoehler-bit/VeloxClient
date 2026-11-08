@@ -445,7 +445,9 @@ fn dialog(
                                         .spacing(8.)
                                         .padding(Gaps::new_all(12.))
                                         .corner_radius(rounded(10.))
-                                        .background(colors::component_bg())
+                                        .background(crate::theme::glass::glass_over(
+                                            colors::component_bg(),
+                                        ))
                                         .border(border_all_color(1., colors::component_border()))
                                         .children(facts),
                                 )
@@ -573,7 +575,7 @@ fn shared_section(preview: &SharedPreview) -> Element {
                 .spacing(6.)
                 .padding(Gaps::new_all(12.))
                 .corner_radius(rounded(10.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::component_border()))
                 .child(
                     label()
@@ -605,7 +607,7 @@ fn existing_section(pack: &ExistingPackView, existing: State<ExistingPack>) -> i
         .spacing(8.)
         .padding(Gaps::new_all(12.))
         .corner_radius(rounded(10.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             label()
@@ -796,7 +798,7 @@ impl Component for FlaggedCard {
             .spacing(8.)
             .padding(Gaps::new_all(12.))
             .corner_radius(rounded(10.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::component_border()))
             .child(
                 rect()

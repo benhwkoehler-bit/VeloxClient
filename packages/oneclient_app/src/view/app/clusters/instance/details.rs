@@ -509,7 +509,7 @@ fn cover_field(
         .spacing(14.)
         .padding(Gaps::new_all(12.))
         .corner_radius(rounded(CARD_RADIUS))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .border(border_all_color(1., colors::component_border()))
         .child(
             rect()

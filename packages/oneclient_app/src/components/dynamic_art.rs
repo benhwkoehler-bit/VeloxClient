@@ -167,7 +167,7 @@ impl Component for DynamicArt {
             return rect()
                 .width(Size::fill())
                 .height(Size::fill())
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .opacity(pulse_v)
                 .into_element();
         }

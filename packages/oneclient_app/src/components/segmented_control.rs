@@ -123,7 +123,7 @@ impl<T: Copy + PartialEq + 'static> Component for SegmentedControl<T> {
             .spacing(2.)
             .padding(Gaps::new_all(3.))
             .corner_radius(rounded(9.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::component_border()))
             .children(self.segments.iter().map(move |seg| {
                 SegmentButton {

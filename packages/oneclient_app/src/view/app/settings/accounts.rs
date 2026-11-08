@@ -161,7 +161,7 @@ fn hero(
         .spacing(16.)
         .padding(Gaps::new_all(16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(model_frame(account.as_ref().map(|account| account.id)))
         .child(
             rect()
@@ -255,7 +255,7 @@ fn model_frame(id: Option<Uuid>) -> impl IntoElement {
                 .center()
                 .overflow(Overflow::Clip)
                 .corner_radius(rounded(12.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::component_border()))
                 .child(match id {
                     Some(id) => PlayerModel::new(id)
@@ -315,7 +315,7 @@ fn offline_dialog(
                         .spacing(16.)
                         .padding(Gaps::new_all(20.))
                         .corner_radius(rounded(16.))
-                        .background(colors::page_elevated())
+                        .background(crate::theme::glass::glass_over(colors::page_elevated()))
                         .border(border_all_color(1., colors::component_border()))
                         .child(
                             label()
@@ -499,7 +499,7 @@ impl Component for AccountRow {
             .spacing(12.)
             .padding(Gaps::new_all(12.))
             .corner_radius(rounded(12.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., border_color))
             .opacity(if is_refreshing {
                 REFRESHING_OPACITY
@@ -682,7 +682,7 @@ fn badge(icon: impl IntoElement, text: String, border: Color, fg: Color) -> impl
         .padding(Gaps::new_symmetric(2., 8.))
         .corner_radius(rounded(999.))
         .border(border_all_color(1., border))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(icon)
         .child(
             label()
@@ -702,7 +702,7 @@ fn empty_state() -> Element {
         .padding(Gaps::new_all(32.))
         .spacing(8.)
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             Icon::new(IconType::Users01)
                 .size(32.)

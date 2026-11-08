@@ -40,7 +40,7 @@ fn language_row(code: Option<String>, is_selected: bool, dispatch: Actions) -> i
         .spacing(16.)
         .padding(Gaps::new_symmetric(12., 16.))
         .corner_radius(rounded(12.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .cursor(CursorIcon::Pointer)
         .on_press(move |_| {
             let code = code.clone();

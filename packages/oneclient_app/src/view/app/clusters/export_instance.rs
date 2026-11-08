@@ -256,7 +256,7 @@ impl Component for ExportInstanceModal {
                             .spacing(16.)
                             .padding(Gaps::new_all(20.))
                             .corner_radius(rounded(16.))
-                            .background(colors::page_elevated())
+                            .background(crate::theme::glass::glass_over(colors::page_elevated()))
                             .border(border_all_color(1., colors::component_border()))
                             .children(content),
                     ),
@@ -394,7 +394,7 @@ fn owner_panel(check: &OwnerCheck, copied: State<Option<Copied>>) -> Option<Elem
                     .spacing(4.)
                     .padding(Gaps::new(16., 12., 16., 18.))
                     .corner_radius(rounded(12.))
-                    .background(colors::component_bg())
+                    .background(crate::theme::glass::glass_over(colors::component_bg()))
                     .border(border_all_color(1., colors::component_border()))
                     .child(code)
                     .child(copy_icon(
@@ -995,7 +995,7 @@ fn ready_view(
                 .padding(Gaps::new(28., 12., 28., 12.))
                 .center()
                 .corner_radius(rounded(12.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .border(border_all_color(1., colors::component_border()))
                 .child(
                     label()

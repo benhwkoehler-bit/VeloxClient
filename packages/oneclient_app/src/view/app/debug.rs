@@ -174,7 +174,7 @@ impl Component for ClusterList {
                     .spacing(12.)
                     .padding(Gaps::new_symmetric(10., 14.))
                     .corner_radius(rounded(10.))
-                    .background(colors::page_elevated())
+                    .background(crate::theme::glass::glass_over(colors::page_elevated()))
                     .child(
                         rect()
                             .vertical()
@@ -1522,7 +1522,7 @@ fn sql_result(state: &SqlResult) -> Element {
             .width(Size::fill())
             .padding(Gaps::new_symmetric(10., 14.))
             .corner_radius(rounded(8.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::danger()))
             .child(
                 label()
@@ -1652,7 +1652,7 @@ fn toggle_row(title: &'static str, on: State<bool>) -> Element {
         .main_align(Alignment::SpaceBetween)
         .padding(Gaps::new_symmetric(10., 14.))
         .corner_radius(rounded(10.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             label()
                 .text(title)

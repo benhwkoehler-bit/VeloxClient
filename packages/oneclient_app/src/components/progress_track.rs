@@ -1,4 +1,3 @@
-use crate::theme::rounded;
 use freya::prelude::*;
 
 /// The app's one progress meter: a pill-shaped track with a filled portion.
@@ -9,13 +8,13 @@ pub fn progress_track(pct: f32, height: f32, fill: Color, bg: Color) -> Rect {
     rect()
         .width(Size::fill())
         .height(Size::px(height))
-        .corner_radius(rounded(height / 2.))
+        .corner_radius(crate::theme::rounded_full(height / 2.))
         .background(bg)
         .child(
             rect()
                 .width(Size::percent(pct.clamp(0.0, 100.0)))
                 .height(Size::fill())
-                .corner_radius(rounded(height / 2.))
+                .corner_radius(crate::theme::rounded_full(height / 2.))
                 .background(fill),
         )
 }

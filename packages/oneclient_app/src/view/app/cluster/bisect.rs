@@ -173,7 +173,7 @@ impl Component for BisectBanner {
             .spacing(10.)
             .padding(Gaps::new_all(14.))
             .corner_radius(rounded(10.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., accent.with_a(120)))
             .child(
                 rect()

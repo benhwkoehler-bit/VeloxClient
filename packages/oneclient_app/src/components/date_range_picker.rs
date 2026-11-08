@@ -140,7 +140,7 @@ impl Component for DateRangePicker {
                     .padding(12.)
                     .corner_radius(rounded(10.))
                     .border(border_all_color(1., colors::component_border()))
-                    .background(colors::page_elevated())
+                    .background(crate::theme::glass::glass_over(colors::page_elevated()))
                     .on_sized(move |e: Event<SizedEventData>| {
                         panel_height.set_if_modified(e.area.height());
                     })
@@ -217,7 +217,7 @@ fn arrow(
         .height(Size::px(24.))
         .center()
         .corner_radius(rounded(6.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .maybe(enabled, |el| {
             el.cursor(CursorIcon::Pointer)
                 .on_press(move |_| step(delta))
@@ -326,7 +326,7 @@ impl<F: FnMut(NaiveDate) + Clone + 'static> Component for DayCell<F> {
         };
 
         let color = if self.edge {
-            colors::fg_primary()
+            colors::on_brand()
         } else if !enabled || self.outside {
             colors::fg_secondary().with_a(90)
         } else {
@@ -388,7 +388,7 @@ fn footer(
             rect()
                 .padding(Gaps::new_symmetric(4., 8.))
                 .corner_radius(rounded(6.))
-                .background(colors::component_bg())
+                .background(crate::theme::glass::glass_over(colors::component_bg()))
                 .cursor(CursorIcon::Pointer)
                 .a11y_role(AccessibilityRole::Button)
                 .on_press(move |e: Event<PressEventData>| {

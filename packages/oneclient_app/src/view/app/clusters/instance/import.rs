@@ -136,7 +136,7 @@ fn not_listed_row(
         .spacing(12.)
         .padding(Gaps::new_symmetric(12., 14.))
         .corner_radius(rounded(10.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .child(
             label()
                 .width(Size::flex(1.0))

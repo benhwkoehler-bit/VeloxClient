@@ -225,7 +225,7 @@ fn dialog(
         .max_height(Size::window_percent(92.))
         .overflow(Overflow::Clip)
         .corner_radius(rounded(18.))
-        .background(colors::page_elevated())
+        .background(crate::theme::glass::glass_over(colors::page_elevated()))
         .border(border_all_color(1., colors::component_border()))
         .shadow(Shadow::from((
             0.,
@@ -295,9 +295,9 @@ fn art_panel(
                 .background(
                     LinearGradient::new()
                         .angle(0.)
-                        .stop((Color::from_af32rgb(0.0, 13, 17, 21), 28.))
-                        .stop((Color::from_af32rgb(0.85, 13, 17, 21), 58.))
-                        .stop((Color::from_af32rgb(0.98, 13, 17, 21), 100.)),
+                        .stop((Color::from_af32rgb(0.0, 13, 13, 13), 28.))
+                        .stop((Color::from_af32rgb(0.85, 13, 13, 13), 58.))
+                        .stop((Color::from_af32rgb(0.98, 13, 13, 13), 100.)),
                 )
                 .child(
                     rect()

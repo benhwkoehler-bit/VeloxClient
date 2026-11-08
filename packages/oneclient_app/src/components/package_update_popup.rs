@@ -384,7 +384,7 @@ fn cluster_header(name: &str, first: bool) -> impl IntoElement {
         .padding(Gaps::new_symmetric(6., 8.))
         .margin(Gaps::new(if first { 0. } else { 8. }, 0., 3., 0.))
         .corner_radius(rounded(8.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .child(
             label()
                 .text(name.to_string())
@@ -479,7 +479,7 @@ impl Component for UpdateRow {
             .spacing(10.)
             .padding(Gaps::new_symmetric(8., 10.))
             .corner_radius(rounded(8.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .content(Content::Flex)
             .child(
                 Icon::new(IconType::RefreshCw01)

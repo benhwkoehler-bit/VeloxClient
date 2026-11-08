@@ -209,7 +209,9 @@ impl Component for Dropdown {
                                 .padding(4.)
                                 .corner_radius(rounded(8.))
                                 .border(border_all_color(1., colors::component_border()))
-                                .background(colors::page_elevated())
+                                .background(
+                                    crate::theme::glass::glass_over(colors::page_elevated()),
+                                )
                                 .overflow(Overflow::Clip)
                                 .child(
                                     ScrollArea::new()

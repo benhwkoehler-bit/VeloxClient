@@ -10,7 +10,7 @@ fn skeleton_block(width: Size, height: f32) -> impl IntoElement {
         .width(width)
         .height(Size::px(height))
         .corner_radius(rounded(6.))
-        .background(colors::component_bg())
+        .background(crate::theme::glass::glass_over(colors::component_bg()))
         .into_element()
 }
 
@@ -37,7 +37,7 @@ impl Component for SkeletonCard {
             .width(Size::flex(1.0))
             .height(Size::px(CARD_H))
             .corner_radius(rounded(8.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::component_border()))
             .overflow(Overflow::Clip)
             .opacity(pulse)
@@ -83,7 +83,7 @@ impl Component for SkeletonListRow {
             .spacing(12.)
             .padding(Gaps::new_all(10.))
             .corner_radius(rounded(8.))
-            .background(colors::component_bg())
+            .background(crate::theme::glass::glass_over(colors::component_bg()))
             .border(border_all_color(1., colors::component_border()))
             .opacity(pulse)
             .child(skeleton_block(Size::px(48.), 48.))

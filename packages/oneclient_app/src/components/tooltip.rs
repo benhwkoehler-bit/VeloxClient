@@ -242,7 +242,7 @@ impl Component for TooltipBubble {
             .max_width(Size::px(MAX_WIDTH))
             .padding(Gaps::new_symmetric(5., 9.))
             .corner_radius(rounded(8.))
-            .background(colors::page_elevated())
+            .background(crate::theme::glass::glass_over(colors::page_elevated()))
             .border(border_all_color(1., colors::component_border()))
             .on_sized(move |e: Event<SizedEventData>| {
                 let bubble = e.area.size;

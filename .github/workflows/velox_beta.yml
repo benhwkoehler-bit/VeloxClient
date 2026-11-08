@@ -205,5 +205,7 @@ jobs:
             --title "VeloxClient Beta" \
             --notes "Beta build from ${GITHUB_SHA::7}, built automatically by GitHub Actions.
 
+          New look: VeloxClient is now black and white instead of purple, including the logo and app icon.
+
           - Windows: VeloxClient-beta-windows-setup.exe. If SmartScreen appears, click \"More info\" and then \"Run anyway\".
           - macOS (Apple Silicon or Intel): open the .dmg and drag VeloxClient into Applications. On first launch, right-click the app and choose \"Open\" (or allow it under System Settings > Privacy & Security)."
