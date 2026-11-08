@@ -30,7 +30,6 @@ pub struct DynamicArt {
     cover: Option<PathBuf>,
     cover_picked: bool,
     max_edge: u32,
-    preview_edge: Option<u32>,
     url: Option<String>,
     skeleton: bool,
 }
@@ -71,7 +70,6 @@ impl DynamicArt {
             cover: None,
             cover_picked: false,
             max_edge: DEFAULT_IMAGE_EDGE,
-            preview_edge: None,
             url: None,
             skeleton: false,
         }
@@ -101,23 +99,6 @@ impl DynamicArt {
         self.max_edge = max_edge;
         self
     }
-
-    /// Stand in with a smaller cached variant until the full-size art downloads
-    #[must_use]
-    pub fn preview_edge(mut self, preview_edge: u32) -> Self {
-        self.preview_edge = Some(preview_edge);
-        self
-    }
-
-    pub fn use_bytes(&self) -> (String, Bytes) {
-        use_art_bytes(self)
-    }
-}
-
-pub fn use_art_bytes(art: &DynamicArt) -> (String, Bytes) {
-    let max_edge = art.max_edge;
-    use_resolved_art(art)
-        .unwrap_or_else(|| (format!("{max_edge}|{HOME_BACKGROUND_ASSET}"), bundled_art()))
 }
 
 fn bundled_art() -> Bytes {
@@ -134,7 +115,6 @@ fn use_resolved_art(art: &DynamicArt) -> Option<(String, Bytes)> {
         cover,
         cover_picked,
         max_edge,
-        preview_edge,
         url,
         skeleton: _,
     } = art.clone();
@@ -158,21 +138,9 @@ fn use_resolved_art(art: &DynamicArt) -> Option<(String, Bytes)> {
 
     let image_query = use_cached_image(art_url.clone(), max_edge);
 
-    let preview_edge = preview_edge.filter(|edge| *edge != max_edge);
-    let preview_query = match preview_edge {
-        Some(edge) => use_cached_image(art_url.clone(), edge),
-        None => use_cached_image(None, 0),
-    };
-
     let full = loaded_image(art_url.as_deref(), &image_query)
         .map(|(url, bytes)| (format!("{max_edge}|{url}"), bytes));
-    let preview = || {
-        let edge = preview_edge?;
-        loaded_image(art_url.as_deref(), &preview_query)
-            .map(|(url, bytes)| (format!("{edge}|{url}"), bytes))
-    };
-
-    cover_bytes.or(full).or_else(preview)
+    cover_bytes.or(full)
 }
 
 impl Component for DynamicArt {

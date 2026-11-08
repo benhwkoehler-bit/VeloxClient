@@ -6,9 +6,10 @@ mod onboarding_shell;
 mod pending_launch;
 mod root_layout;
 mod settings_shell;
+mod terminal_backdrop;
 
 pub use animated_outlet::AnimatedAppOutlet;
-pub use app_shell::{AppShell, HOME_BACKGROUND_ASSET, HomeArtPrefetch};
+pub use app_shell::{AppShell, HOME_BACKGROUND_ASSET};
 pub use cluster_shell::{ClusterShell, cluster_content};
 pub use ipc_commands::use_ipc_commands;
 pub use onboarding_shell::OnboardingShell;

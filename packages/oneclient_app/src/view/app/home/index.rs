@@ -8,7 +8,6 @@ use freya::prelude::*;
 use super::player_scene::{
     animation_enabled, current_scene, scene_animation, scene_props, set_animation_enabled,
 };
-use super::side_panel::HomeSidePanel;
 use crate::components::{
     ActiveClusterPanel, HomeStatusLine, LaunchBar, PlayerModel, toggle_controlled,
     use_home_clusters,
@@ -18,7 +17,6 @@ use crate::i18n::t;
 use crate::theme::{self, colors, rounded, text_size};
 
 const STAGE_INSET_PX: f32 = 22.;
-const STAGE_SCRIM_ALPHA: u8 = 232;
 const SCENE_CHECK_INTERVAL: Duration = Duration::from_secs(5);
 const SCENE_FADE_MS: u64 = 700;
 const NAMETAG_TOP_PX: f32 = 26.;
@@ -29,7 +27,7 @@ const PLAYER_YAW: f32 = 0.;
 const PLAYER_ZOOM: f32 = 0.9;
 const PLAYER_FOCUS_Y: f32 = 2.5;
 
-/// VeloxClient: dark stage with a large player and the launch button, version cards on the right
+/// VeloxClient: black stage with a large player and the launch button
 #[derive(PartialEq)]
 pub struct Home;
 
@@ -49,7 +47,6 @@ impl Component for Home {
                     .width(Size::flex(1.0))
                     .height(Size::fill())
                     .overflow(Overflow::Clip)
-                    .background(colors::page().with_a(STAGE_SCRIM_ALPHA))
                     .child(HomePlayer { animate: animating })
                     .child(
                         rect()
@@ -103,7 +100,6 @@ impl Component for Home {
                             ),
                     ),
             )
-            .child(HomeSidePanel)
     }
 }
 
