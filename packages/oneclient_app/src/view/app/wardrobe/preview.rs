@@ -115,7 +115,7 @@ impl Component for RightColumn {
                 on_close: EventHandler::new(move |()| show_cart.set(false)),
             }
             .into_element()
-        } else if *adding_skin.read() && store_enabled {
+        } else if *adding_skin.read() {
             AddSkinPanel {
                 account: data.account,
                 busy: data.busy,

@@ -273,11 +273,13 @@ async fn add_worn_skin(
     model: SkinModel,
     name: Option<&str>,
 ) -> Result<api::SkinInfo, PlusError> {
-    let info = api::add_skin(account, hash, model, name).await?;
+    let info = super::skin_library::add_skin(account, hash, model, name).await?;
     if info.model == model {
         return Ok(info);
     }
-    match api::update_skin(account, info.id, &serde_json::json!({ "model": model })).await {
+    match super::skin_library::update_skin(account, info.id, &serde_json::json!({ "model": model }))
+        .await
+    {
         Ok(updated) => Ok(updated),
         Err(err) => {
             tracing::warn!(
@@ -396,7 +398,7 @@ impl QueryCapability for SkinsQuery {
 
     async fn run(&self, keys: &Self::Keys) -> Result<Self::Ok, Self::Err> {
         let account = fresh_account(keys.account).await?;
-        let list = api::list_skins(&account)
+        let list = super::skin_library::list_skins(&account)
             .await
             .map_err(|err| list_message(err, t("oneclient.wardrobe.list.skins_unavailable")))?;
         if let Ok(profile) = mojang_profile(&account).await
@@ -406,7 +408,9 @@ impl QueryCapability for SkinsQuery {
                 Ok(Some(_))
             )
         {
-            return Ok(api::list_skins(&account).await.unwrap_or(list));
+            return Ok(super::skin_library::list_skins(&account)
+                .await
+                .unwrap_or(list));
         }
         Ok(list)
     }
@@ -1240,23 +1244,31 @@ async fn run_action(account: &MinecraftAccount, action: &WardrobeAction) -> Resu
             } else {
                 SkinModel::Classic
             };
-            api::add_skin(account, &hash, model, Some(&exact))
+            super::skin_library::add_skin(account, &hash, model, Some(&exact))
                 .await
                 .map_err(plus_message)?;
             Ok(tf("oneclient.wardrobe.skin.saved_player", &[&exact]))
         }
         WardrobeAction::RenameSkin { id, old, name, .. } => {
-            let skin = api::update_skin(account, *id, &serde_json::json!({ "name": name.trim() }))
-                .await
-                .map_err(plus_message)?;
+            let skin = super::skin_library::update_skin(
+                account,
+                *id,
+                &serde_json::json!({ "name": name.trim() }),
+            )
+            .await
+            .map_err(plus_message)?;
             Ok(tf("oneclient.wardrobe.renamed", &[&old, &skin.name]))
         }
         WardrobeAction::FavoriteSkin {
             id, name, favorite, ..
         } => {
-            api::update_skin(account, *id, &serde_json::json!({ "favorite": favorite }))
-                .await
-                .map_err(plus_message)?;
+            super::skin_library::update_skin(
+                account,
+                *id,
+                &serde_json::json!({ "favorite": favorite }),
+            )
+            .await
+            .map_err(plus_message)?;
             Ok(if *favorite {
                 tf("oneclient.wardrobe.favorite.added", &[&name])
             } else {
@@ -1285,7 +1297,7 @@ async fn run_action(account: &MinecraftAccount, action: &WardrobeAction) -> Resu
                         .map_err(mojang_write_failed(account.id))?;
                 remember_profile(account, profile).await;
             }
-            api::update_skin(account, *id, &serde_json::json!({ "model": model }))
+            super::skin_library::update_skin(account, *id, &serde_json::json!({ "model": model }))
                 .await
                 .map_err(plus_message)?;
             Ok(if *slim {
@@ -1295,7 +1307,9 @@ async fn run_action(account: &MinecraftAccount, action: &WardrobeAction) -> Resu
             })
         }
         WardrobeAction::DeleteSkin { id, name, .. } => {
-            api::delete_skin(account, *id).await.map_err(plus_message)?;
+            super::skin_library::delete_skin(account, *id)
+                .await
+                .map_err(plus_message)?;
             forget_recorded(account.id, *id).await;
             Ok(tf("oneclient.wardrobe.deleted", &[&name]))
         }

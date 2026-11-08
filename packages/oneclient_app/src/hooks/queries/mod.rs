@@ -31,6 +31,7 @@ mod player_profile;
 mod screenshots;
 mod settings_profiles;
 mod skin;
+pub mod skin_library;
 mod state;
 mod storage;
 mod tos;

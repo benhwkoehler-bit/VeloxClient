@@ -109,6 +109,21 @@ fn section_tabs() -> [(Section, &'static str, IconType); 5] {
     ]
 }
 
+/// VeloxClient: skins upload straight to Minecraft and keep a library on
+/// this computer, so they work with Poly+ off; the rest needs Poly+
+fn works_without_plus(section: Section) -> bool {
+    matches!(section, Section::Skins | Section::Cosmetics)
+}
+
+/// The section to show, falling back to Skins when Poly+ is off
+fn visible_section(chosen: Section, plus_available: bool) -> Section {
+    if plus_available || works_without_plus(chosen) {
+        chosen
+    } else {
+        Section::Skins
+    }
+}
+
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub(super) enum Sort {
     Popular,
@@ -982,11 +997,7 @@ impl Component for WardrobeBody {
             return centered_spinner(t("oneclient.wardrobe.page.loading"));
         }
 
-        let current_section = if data.plus_available() {
-            *section.read()
-        } else {
-            Section::Cosmetics
-        };
+        let current_section = visible_section(*section.read(), data.plus_available());
         let history = *show_history.read() && data.plus_available();
         let ctx = GridCtx {
             data: &data,
@@ -1277,11 +1288,10 @@ impl Header {
         let mut show_cart = shared.show_cart;
         let store_enabled = data.plus_available();
         let history = *show_history.read() && store_enabled;
-        let sections: Vec<(Section, &str, IconType)> = if store_enabled {
-            section_tabs().to_vec()
-        } else {
-            vec![section_tabs()[4]]
-        };
+        let sections: Vec<(Section, &str, IconType)> = section_tabs()
+            .into_iter()
+            .filter(|(section, ..)| store_enabled || works_without_plus(*section))
+            .collect();
 
         let mut chips = rect().horizontal().width(Size::flex(1.0)).spacing(8.);
         for (target, text, icon) in sections {
@@ -2752,4 +2762,21 @@ fn skin_card(ctx: &GridCtx, skin: &SkinInfo) -> Element {
         on_action: wear,
     }
     .into_element()
+}
+
+#[cfg(test)]
+mod velox_tests {
+    use super::*;
+
+    #[test]
+    fn skins_stay_reachable_without_poly_plus() {
+        assert_eq!(visible_section(Section::Skins, false), Section::Skins);
+        assert_eq!(
+            visible_section(Section::Cosmetics, false),
+            Section::Cosmetics
+        );
+        assert_eq!(visible_section(Section::Featured, false), Section::Skins);
+        assert_eq!(visible_section(Section::Emotes, false), Section::Skins);
+        assert_eq!(visible_section(Section::Outfits, true), Section::Outfits);
+    }
 }
